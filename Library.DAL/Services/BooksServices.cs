@@ -88,17 +88,22 @@ namespace Library.DAL.Services
             return result;
         }
 
-        public async Task<List<ListBookDTO>> GetAll()
+        public async Task<MessageHelper<List<ListBookDTO>>> GetAll()
         {
+            MessageHelper<List<ListBookDTO>> result = new MessageHelper<List<ListBookDTO>>();
             try
             {
                 var reponseRepository = await _bookRepository.GetAll();
                 var books = reponseRepository.Select(t => new ListBookDTO(t)).ToList();
-                return books;
+                result.Sucess = true;
+                result.obj = books;
+
+                return result;
                 
             }
             catch (Exception ex) {
-                return null;
+                result.Sucess= false;
+                return result;
             }
         }
 

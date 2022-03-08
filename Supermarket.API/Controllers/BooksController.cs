@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Data.Entities;
 using Supermarket.Data.Interfaces.Services;
+using Supermarket.Data.Models;
 using Supermarket.Data.Models.Books;
 using Supermarket.Data.Models.Helper;
 
@@ -20,9 +21,9 @@ namespace Supermarket.API.Controllers
 
         [HttpGet]
         [Route("getAll")]
-        public async Task<IActionResult> GetAll() {
+        public async Task<MessageHelper<List<ListBookDTO>>> GetAll() {
             var result = await _bookService.GetAll();
-            return Ok(result);
+            return result;
         }
 
 
