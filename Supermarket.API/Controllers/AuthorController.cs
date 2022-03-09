@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Supermarket.Data;
 using Supermarket.Data.Entities;
+using Supermarket.Data.Interfaces.Services;
+using Supermarket.Data.Models.Authors;
+using Supermarket.Data.Models.Helper;
 
 namespace Supermarket.API.Controllers
 {
@@ -8,45 +11,46 @@ namespace Supermarket.API.Controllers
     [ApiController]
     public class AuthorController : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
-        public AuthorController(ApplicationDBContext context)
+        private IAuthorService _authorService;
+        public AuthorController(IAuthorService authorService)
         {
-            _context = context;
+           _authorService = authorService;
         }
 
         [HttpGet]
         [Route("getAll")]
-        public async Task<IActionResult> getAll() {
-            Author escritor = new Author() { 
-                Name = "Henrique", 
-                AuthorId = 2,
-                BirthDate = DateTime.Now,
-                DeadDate = DateTime.Now.AddDays(2),
-                Books = new List<Book>() {
-                    new Book() { Id = 2, Description = "ola", Name="book", Price=30, StockNumber=30, AuthorId = 2},
-                     new Book() { Id = 3, Description = "ola2", Name="book", Price=300, StockNumber=30, AuthorId = 2},
-                }
-
-            };
-
-            return Ok(escritor);
+        public async Task<MessageHelper<List<ListAuthorDTO>>> getAll() {
+            var result = await _authorService.GetAll();
+            return result;
         }
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> Create()
+        public async Task<MessageHelper> Create(CreateAuthorDTO createAuthor)
         {
-            try
-            {
-                await _context.Author.AddAsync(new Author { Name = "Eca de queiros", BirthDate = DateTime.Today, DeadDate = DateTime.Today.AddDays(30)});
-                await _context.SaveChangesAsync();
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception();
-            }
+            var result = await _authorService.Create(createAuthor);
+            return result;
 
+        }
+
+        [HttpPost]
+        [Route("update")]
+        public async Task<MessageHelper<AuthorDTO>> Update(EditAuthorDTO editAuthor)
+        {
+            return await _authorService.Update(editAuthor);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<MessageHelper<AuthorDTO>> GetById(int id)
+        {
+            return await _authorService.GetById(id);
+        }
+
+        [HttpDelete]
+        [Route("delete/{id}")]
+        public async Task<MessageHelper> Delete(int id)
+        {
+            return await _authorService.Delete(id);
         }
     }
 }

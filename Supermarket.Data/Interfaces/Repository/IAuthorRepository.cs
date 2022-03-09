@@ -9,12 +9,14 @@ namespace Supermarket.Data.Interfaces.Repository
 {
     public interface IAuthorRepository
     {
-        public Task<Author> Create(Author author);
+        Task<Author> Create(Author author);
 
-        public Task<Author> GetById(int id);
+        Task<Author> GetById(int id);
 
-        public Task<IEnumerable<Author>> GetAll();
+        Task<IEnumerable<Author>> GetAll();
 
-        public Task<Author> Update();
+        Task<Author> Update(Author author);
+
+        Task<bool> Delete(Author author);
     }
 }

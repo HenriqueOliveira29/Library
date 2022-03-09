@@ -1,4 +1,7 @@
-﻿using Supermarket.Data.Interfaces.Services;
+﻿using Supermarket.Data.Interfaces.Repository;
+using Supermarket.Data.Interfaces.Services;
+using Supermarket.Data.Models.Authors;
+using Supermarket.Data.Models.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +12,159 @@ namespace Library.DAL.Services
 {
     public class AuthorService : IAuthorService
     {
+        private readonly IBookRepository _bookRepository;
+        private readonly IAuthorRepository _authorRepository;
+        public AuthorService(IBookRepository bookRepository, IAuthorRepository authorRepository)
+        {
+            _bookRepository = bookRepository;
+            _authorRepository = authorRepository;
+        }
+        public async Task<MessageHelper> Create(CreateAuthorDTO createAuthor)
+        {
+            MessageHelper result = new MessageHelper();
+            try
+            {
+                CreateAuthorDTOValidator validator = new CreateAuthorDTOValidator();
+                var responseValidate = await validator.ValidateAsync(createAuthor);
+                if (responseValidate == null || responseValidate.IsValid == false) {
+                    if (responseValidate == null) {
+                        result.Message = "Erro ao validar a informacao";
+                        return result;
+                    }
+                    result.Message = responseValidate.Errors.FirstOrDefault()!.ErrorMessage;
+                    return result;
+                }
+                var author = await _authorRepository.Create(createAuthor.ToEntity());
+
+                if (author == null) {
+                    result.Sucess = false;
+                    result.Message = "Autor criado com sucesso";
+                    return result;
+                }
+                result.Sucess = true;
+                result.Message = "Autor criado com sucesso";
+            }
+            catch (Exception ex) {
+                result.Sucess = false;
+                result.Message = ex.Message;
+                return result;
+            }
+            return result;
+
+        }
+
+        public async Task<MessageHelper> Delete(int id)
+        {
+            MessageHelper result = new MessageHelper();
+            try {
+                var haveAuthor = _authorRepository.GetById(id).Result;
+
+                if (haveAuthor == null) {
+                    result.Sucess = false;
+                    result.Message = "Este Autor nao existe";
+                    return result;
+                }
+
+                var deletebook = await _authorRepository.Delete(haveAuthor);
+
+                if (deletebook == false) {
+                    result.Sucess = false;
+                    result.Message = "Nao foi possivel eliminar o Autor";
+                    return result;
+                }
+
+                result.Sucess= true;
+                result.Message = "Autor eliminado com sucesso";
+            } catch (Exception ex) {
+                result.Sucess = false;
+                result.Message = ex.Message;
+            }
+            return result;
+        }
+
+        public async Task<MessageHelper<List<ListAuthorDTO>>> GetAll()
+        {
+            MessageHelper<List<ListAuthorDTO>> result = new MessageHelper<List<ListAuthorDTO>>();
+            try {
+                var responseRepository = await _authorRepository.GetAll();
+                var authors = responseRepository.Select(t => new ListAuthorDTO(t)).ToList();
+                result.Sucess = true;
+                result.obj = authors;
+            } catch (Exception ex) {
+                result.Sucess = false;
+                result.Message= ex.Message;
+                return result;
+            }
+            return result;
+        }
+
+        public async Task<MessageHelper<AuthorDTO>> GetById(int authorid)
+        {
+            MessageHelper<AuthorDTO> result = new MessageHelper<AuthorDTO>();
+            try
+            {
+                var author = await _authorRepository.GetById(authorid);
+
+                if (author == null)
+                {
+                    result.Sucess = false;
+                    result.Message = "Nao foi possivel encontrar este autor";
+                    return result;
+                }
+                result.obj = new AuthorDTO(author);
+                result.Sucess = true;
+            }
+            catch (Exception ex) {
+                result.Sucess= false;
+                result.Message = ex.Message;
+                return result;
+            }
+            return result;
+
+            
+        }
+
+        public async Task<MessageHelper<AuthorDTO>> Update(EditAuthorDTO editAuthor)
+        {
+            MessageHelper<AuthorDTO> result = new();
+            try
+            {
+                EditAuthorDTOValidator validator = new EditAuthorDTOValidator();
+                var responseValidate = validator.Validate(editAuthor);
+                if (responseValidate.IsValid == false || responseValidate == null) {
+
+                    if (responseValidate == null)
+                    {
+                        result.Sucess = false;
+                        result.Message = "Erro ao validar a informacao";
+                        return result;
+                    }
+
+                    result.Message = responseValidate.Errors.FirstOrDefault()!.ErrorMessage;
+                    return result;
+                }
+
+                var author = await _authorRepository.GetById(editAuthor.AuthorId);
+                if (author == null) {
+                    result.Sucess = false;
+                    result.Message = "Nao existe este Autor";
+                    return result;
+                }
+                author.Name = editAuthor.Name;
+                author.BirthDate = editAuthor.BirthDate;
+                author.DeadDate = editAuthor.DeadDate;
+
+                author = await _authorRepository.Update(author);
+
+                result.Sucess = true;
+                result.obj = new AuthorDTO(author);
+                
+            }
+            catch (Exception ex) {
+                result.Sucess = false;
+                result.Message = ex.Message;
+            }
+            return result;
+        }
     }
 }

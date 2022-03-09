@@ -1,4 +1,6 @@
-﻿using Supermarket.Data.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Supermarket.Data;
+using Supermarket.Data.Entities;
 using Supermarket.Data.Interfaces.Repository;
 using System;
 using System.Collections.Generic;
@@ -10,24 +12,43 @@ namespace Library.DAL.Repositories
 {
     public class AuthorRepository : IAuthorRepository
     {
-        public Task<Author> Create(Author author)
+        ApplicationDBContext _context;
+        public AuthorRepository(ApplicationDBContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public async Task<Author> Create(Author author)
+        {
+            await _context.AddAsync(author);
+            await _context.SaveChangesAsync();
+            return author;
         }
 
-        public Task<IEnumerable<Author>> GetAll()
+        public async Task<bool> Delete(Author author)
         {
-            throw new NotImplementedException();
+            _context.Author.Remove(author);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
-        public Task<Author> GetById(int id)
+        public async Task<IEnumerable<Author>> GetAll()
         {
-            throw new NotImplementedException();
+            var query = await _context.Author.Include(t=> t.Books).ToListAsync();
+            return query;
         }
 
-        public Task<Author> Update()
+        public async Task<Author> GetById(int id)
         {
-            throw new NotImplementedException();
+            var query = await _context.Author.Where(t => t.AuthorId == id).FirstOrDefaultAsync();
+            return query;
+        }
+
+        public async Task<Author> Update(Author author)
+        {
+            _context.Entry<Author>(author).CurrentValues.SetValues(author);
+            await _context.SaveChangesAsync();
+            return author;
+
         }
     }
 }
