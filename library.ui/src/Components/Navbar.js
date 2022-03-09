@@ -1,11 +1,64 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-import { Col, Row } from "reactstrap";
-import { NavLink } from "react-router-dom";
+const Appbar = () => {
+    return (
+        <Container>
+            <Navbar>
+                <Logo>
+                    <LogoName>MyLibrary</LogoName>
+                </Logo>
+                <Routes>
+                    <Route>Books</Route>
+                    <Route>Autor</Route>
+                </Routes>
+            </Navbar>
+        </Container>
+    );
+};
 
-function Navbar() {
-    return <div className="Navbar"></div>;
-}
+export default Appbar;
 
-export default Navbar;
+const Container = styled.div`
+    width: 100vw;
+    height: 10vh;
+    background-color: #fb8500;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const Navbar = styled.div`
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+`;
+const Logo = styled.div`
+    display: flex;
+    align-items: center;
+`;
+const LogoName = styled.div`
+    color: white;
+    font-weight: 700;
+    font-size: 25px;
+    cursor: pointer;
+`;
+const Routes = styled.div`
+    display: flex;
+`;
+const Route = styled.div`
+    margin: 20px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 20px;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 10px;
+    transition: 0.3s;
+    :hover {
+        background-color: #faa307;
+    }
+`;

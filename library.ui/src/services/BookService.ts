@@ -32,4 +32,14 @@ export class BookService{
            return new MessagingHelper<ListBookDTO[]>(false, "erro", []);
         }
     }
+
+    async Delete(id: number) : Promise<MessagingHelper<null>>{
+        try{
+            var response = await axios.delete("https://localhost:5001/api/Books/delete/"+id);
+            return response.data;
+        }catch (error){
+            return new MessagingHelper<null>(false,"Erro ao eliminar o livro", null);
+        }
+
+    } 
 }
