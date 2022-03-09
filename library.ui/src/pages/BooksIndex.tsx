@@ -35,7 +35,6 @@ function BooksIndex() {
   useEffect(() => {
 
     fetchData();
-    console.log(data)
   }, [isLoading]);
 
   const fetchData = async () => {
