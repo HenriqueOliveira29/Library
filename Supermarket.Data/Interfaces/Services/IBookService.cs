@@ -7,7 +7,7 @@ namespace Supermarket.Data.Interfaces.Services
 {
     public interface IBookService
     {
-        Task<MessageHelper<List<ListBookDTO>>> GetAll();
+        Task<PaginateList<ListBookDTO>> GetAll(SearchDTO searchDTO);
 
         Task<MessageHelper> Create(CreateBookDTO createBook);
 

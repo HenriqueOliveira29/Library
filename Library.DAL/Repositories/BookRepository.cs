@@ -30,10 +30,27 @@ namespace Library.DAL.Repositories
             return true;
         }
 
-        public async Task<IEnumerable<Book>> GetAll()
+        public async Task<PaginateList<Book>> GetAll(int currentPage = 1, int pageSize = 5)
         {
-            var query = await _context.Book.Include(t => t.Author).ToListAsync();
-            return query;
+            PaginateList<Book> response = new PaginateList<Book>();
+            var query =  _context.Book.Include(t => t.Author).AsQueryable();
+
+            
+            var numberOfItemsToSkip = pageSize * (currentPage - 1);
+            query = query.Skip(numberOfItemsToSkip);
+            query = query.Take(pageSize);
+
+            var list = await query.ToListAsync();
+
+            response.TotalRecords = await query.CountAsync();
+            response.Items = list;
+            response.CurrentPage = currentPage;
+            response.PageSize = pageSize;
+            response.Success = true;
+            response.Message = null;
+
+
+            return response;
         }
 
         public async Task<Book> GetByAuthor(int id)

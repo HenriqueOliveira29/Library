@@ -19,10 +19,10 @@ namespace Supermarket.API.Controllers
             _bookService = bookService;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("getAll")]
-        public async Task<MessageHelper<List<ListBookDTO>>> GetAll() {
-            var result = await _bookService.GetAll();
+        public async Task<PaginateList<ListBookDTO>> GetAll(SearchDTO search) {
+            var result = await _bookService.GetAll(search);
             return result;
         }
 

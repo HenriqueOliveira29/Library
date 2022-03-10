@@ -88,21 +88,20 @@ namespace Library.DAL.Services
             return result;
         }
 
-        public async Task<MessageHelper<List<ListBookDTO>>> GetAll()
+        public async Task<PaginateList<ListBookDTO>> GetAll(SearchDTO searchDTO)
         {
-            MessageHelper<List<ListBookDTO>> result = new MessageHelper<List<ListBookDTO>>();
+            PaginateList<ListBookDTO> result = new PaginateList<ListBookDTO>();
             try
             {
-                var reponseRepository = await _bookRepository.GetAll();
-                var books = reponseRepository.Select(t => new ListBookDTO(t)).ToList();
-                result.Sucess = true;
-                result.obj = books;
-
+                var reponseRepository = await _bookRepository.GetAll(searchDTO.CurrentPage, searchDTO.PageSize);
+                result.Items = reponseRepository.Items.Select(t => new ListBookDTO(t)).ToList(); ;
+                result.Success = true;
+               
                 return result;
                 
             }
             catch (Exception ex) {
-                result.Sucess= false;
+                result.Success= false;
                 return result;
             }
         }
@@ -160,5 +159,7 @@ namespace Library.DAL.Services
             }
             return result; 
         }
+
+        
     }
 }
