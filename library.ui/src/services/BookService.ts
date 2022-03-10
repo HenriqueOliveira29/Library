@@ -42,4 +42,13 @@ export class BookService{
         }
 
     } 
+
+    async getById(id: number) : Promise<MessagingHelper<BookDTO | null>>{
+        try{
+            var response = await axios.get("https://localhost:5001/api/Books/"+id );
+            return response.data;
+        }catch (error){
+            return new MessagingHelper<BookDTO | null>(false, "erro ao encontrar o livro", null);
+        }
+    }
 }

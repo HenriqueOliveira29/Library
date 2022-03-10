@@ -51,6 +51,9 @@ function BooksIndex() {
       fetchData();
     }
   }
+  const updateBook = (id: number) => {
+    window.location.href = "/updateBook/" + id;
+  }
 
   return (
     <div>
@@ -65,7 +68,7 @@ function BooksIndex() {
                 </Typography>
               </Box>
               <Box>
-                <Link to="">
+                <Link to="/createBook" style={{ textDecoration: "none" }}>
                   <Button variant='contained' color="primary" style={{ backgroundColor: "#fb8500" }}>
                     Create Book
                   </Button>
@@ -114,7 +117,7 @@ function BooksIndex() {
                           {book.stockNumber}
                         </TableCell>
                         <TableCell align="right">
-                          {book.description}
+                          {book.author}
                         </TableCell>
                         <TableCell align="right">
                           {book.description}
@@ -122,7 +125,7 @@ function BooksIndex() {
 
                         <TableCell align="center">
                           <ButtonGroup aria-label="buttons" style={{ color: "#fb8500" }}>
-                            <Button onClick={() => { console.log("adeus") }} style={{ color: "#fb8500" }}>
+                            <Button onClick={() => { updateBook(book.id) }} style={{ color: "#fb8500" }}>
                               Edit
                             </Button>
                             <Button onClick={() => { deleteBook(book.id) }} style={{ color: "#fb8500" }}>

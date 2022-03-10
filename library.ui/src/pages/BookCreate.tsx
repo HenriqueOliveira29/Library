@@ -52,7 +52,7 @@ function BookCreate() {
                     <h1>Create Book</h1>
                 </Title>
                 <Inputs>
-                    <Input type="text" onChange={(element) => setBook({ ...book, name: element.target.value })} placeholder="Nome do Livro" value={book.name}>
+                    <Input type="text" onChange={(element) => setBook({ ...book, name: element.target.value })} placeholder="Nome do Livro">
                     </Input>
                     <Input type="text" onChange={(element) => setBook({ ...book, Description: element.target.value })} placeholder="Descricao">
                     </Input>
@@ -63,8 +63,6 @@ function BookCreate() {
                                 return (
                                     <option value={author.authorId}>{author.name}</option>
                                 )
-
-
                             })
                         }
 

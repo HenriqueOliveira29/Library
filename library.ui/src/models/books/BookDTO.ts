@@ -3,7 +3,7 @@ export class BookDTO{
     Name: string = "";
     Price: number = 0;
     Description: string = "";
-    StockNumber: string = "";
+    StockNumber: number = 0;
     AuthorName: string = "";
     AuthorID:number = 0;
 

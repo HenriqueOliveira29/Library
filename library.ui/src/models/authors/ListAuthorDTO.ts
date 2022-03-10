@@ -2,6 +2,6 @@ export interface ListAuthorDTO{
     authorId: number;
     name: string;
     birthDate: Date;
-    beadDate: Date;
+    deadDate: Date;
     bookNumber: number;
 }

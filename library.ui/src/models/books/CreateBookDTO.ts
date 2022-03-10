@@ -10,5 +10,5 @@ export class CreateBookDTO{
 
     StockNumber: number=0;
 
-     AuthorId: number = 0;
+    AuthorId: number = 0;
 }

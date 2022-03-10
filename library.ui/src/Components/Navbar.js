@@ -7,11 +7,18 @@ const Appbar = () => {
         <Container>
             <Navbar>
                 <Logo>
-                    <LogoName>MyLibrary</LogoName>
+                    <Link to="/" style={{ textDecoration: "none" }}>
+                        <LogoName>MyLibrary</LogoName>
+                    </Link>
                 </Logo>
+
                 <Routes>
-                    <Route>Books</Route>
-                    <Route>Autor</Route>
+                    <Link to="/" style={{ textDecoration: "none" }}>
+                        <Route>Books</Route>
+                    </Link>
+                    <Link to="/author" style={{ textDecoration: "none" }}>
+                        <Route>Autor</Route>
+                    </Link>
                 </Routes>
             </Navbar>
         </Container>
