@@ -88,12 +88,27 @@ namespace Library.DAL.Services
             return result;
         }
 
-        public async Task<PaginateList<ListBookDTO>> GetAll(SearchDTO searchDTO)
+        public async Task<PaginateList<ListBookDTO>> GetAll(SearchDTO search)
         {
             PaginateList<ListBookDTO> result = new PaginateList<ListBookDTO>();
             try
             {
-                var reponseRepository = await _bookRepository.GetAll(searchDTO.CurrentPage, searchDTO.PageSize);
+                if (search.PageSize > 100)
+                {
+                    search.PageSize = 100;
+                }
+
+                if (search.PageSize <= 0)
+                {
+                    search.PageSize = 1;
+                }
+
+                if (search.CurrentPage <= 0)
+                {
+                    search.CurrentPage = 1;
+                }
+
+                var reponseRepository = await _bookRepository.GetAll(search.CurrentPage, search.PageSize);
                 result.Items = reponseRepository.Items.Select(t => new ListBookDTO(t)).ToList(); ;
                 result.Success = true;
                

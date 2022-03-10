@@ -17,6 +17,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { Link } from "react-router-dom";
+import { PaginatedList } from '../helpers/PaginatedList';
+import { TableFooter, TablePagination } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: { flexGrow: 1 },
@@ -28,9 +30,11 @@ const useStyles = makeStyles((theme) => ({
 
 function BooksIndex() {
   const classes = useStyles();
-  const [data, setData] = useState<ListBookDTO[]>([]);
+  const [data, setData] = useState<PaginatedList<ListBookDTO>>(new PaginatedList<ListBookDTO>(false, "", "", [], 0));
   const service = new BookService();
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [PageSize, setPageSize] = useState<number>(5);
 
   useEffect(() => {
 
@@ -38,9 +42,10 @@ function BooksIndex() {
   }, [isLoading]);
 
   const fetchData = async () => {
-    var response = await service.GetAll()
+    var response = await service.GetAll(currentPage, PageSize)
       .then((result) => {
-        setData(result.obj)
+        setData(result)
+        console.log(result);
 
       })
     setIsLoading(false);
@@ -102,7 +107,7 @@ function BooksIndex() {
                 </TableHead>
                 <TableBody>
                   {
-                    data.map((book) => (
+                    data.items.map((book) => (
                       <TableRow key={book.id}>
                         <TableCell align="right">
                           {book.id}
@@ -139,6 +144,16 @@ function BooksIndex() {
                 </TableBody>
               </Table>
             </TableContainer>
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={data.count}
+              rowsPerPage={PageSize}
+              page={currentPage}
+              onPageChange={() => { setCurrentPage(currentPage + 1) }}
+              onRowsPerPageChange={(e) => { setPageSize(Number.parseInt(e.target.value)) }}
+
+            />
 
           </Paper>
         </Container>
