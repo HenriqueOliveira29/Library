@@ -6,7 +6,7 @@ import { CreateAuthorDTO } from "../models/authors/CreateAuthorDTO";
 export class AuthorService{
     async GetAll() : Promise<MessagingHelper<ListAuthorDTO[]>>{
         try{
-            var response = await axios.get('https://localhost:5001/api/Author/getAll');
+            var response = await axios.get('http://localhost:5000/api/Author/getAll');
             return response.data;
         }catch(error){
             return new MessagingHelper<ListAuthorDTO[]>(false, "erro", []);
@@ -16,7 +16,7 @@ export class AuthorService{
 
     async Delete(id: number) : Promise<MessagingHelper<null>>{
         try{
-            var response = await axios.delete("https://localhost:5001/api/Author/delete/"+id);
+            var response = await axios.delete("http://localhost:5000/api/Author/delete/"+id);
             return response.data;
         }catch (error){
             return new MessagingHelper<null>(false,"Erro ao eliminar o author", null);
@@ -26,7 +26,7 @@ export class AuthorService{
 
     async Create(author: CreateAuthorDTO) : Promise<MessagingHelper<null>>{
         try{
-            var response = await axios.post("https://localhost:5001/api/Author/create", {
+            var response = await axios.post("http://localhost:5000/api/Author/create", {
                 ...author
             },{
                     headers:{
