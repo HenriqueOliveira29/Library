@@ -16,6 +16,8 @@ import TableRow from '@material-ui/core/TableRow';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { Link } from "react-router-dom";
 import { ListAuthorDTO } from '../models/authors/ListAuthorDTO';
+import { PaginatedList } from '../helpers/PaginatedList';
+import { TableFooter, TablePagination } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -28,19 +30,21 @@ const useStyles = makeStyles((theme) => ({
 
 function AuthorIndex() {
     const classes = useStyles();
-    const [data, setData] = useState<ListAuthorDTO[]>([]);
+    const [data, setData] = useState<PaginatedList<ListAuthorDTO>>(new PaginatedList<ListAuthorDTO>(false, "", "", [], 0, true, false));
     const service = new AuthorService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [PageSize, setPageSize] = useState<number>(5);
 
     useEffect(() => {
 
         fetchData();
-    }, [isLoading]);
+    }, [isLoading])
 
     const fetchData = async () => {
-        var response = await service.GetAll()
+        var response = await service.GetAll(currentPage, PageSize)
             .then((result) => {
-                setData(result.obj)
+                setData(result);
 
             })
         setIsLoading(false);
@@ -52,6 +56,10 @@ function AuthorIndex() {
         if (response.sucess == true) {
             fetchData();
         }
+    }
+
+    const handleChange = (event: unknown, page: number) => {
+        setCurrentPage(page);
     }
 
     return (
@@ -98,7 +106,7 @@ function AuthorIndex() {
                                 </TableHead>
                                 <TableBody>
                                     {
-                                        data.map((author) => (
+                                        data.items.map((author) => (
                                             <TableRow key={author.authorId}>
                                                 <TableCell align="right">
                                                     {author.authorId}
@@ -136,6 +144,15 @@ function AuthorIndex() {
                                 </TableBody>
                             </Table>
                         </TableContainer>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={data.totalRecords}
+                            rowsPerPage={data.pageSize}
+                            page={currentPage}
+                            onPageChange={handleChange}
+                            onRowsPerPageChange={(e) => { setPageSize(Number.parseInt(e.target.value)) }}
+                        />
 
                     </Paper>
                 </Container>

@@ -1,4 +1,5 @@
 ﻿using Supermarket.Data.Entities;
+using Supermarket.Data.Models.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,9 @@ namespace Supermarket.Data.Interfaces.Repository
 
         Task<Author> GetById(int id);
 
-        Task<IEnumerable<Author>> GetAll();
+        Task<PaginateList<Author>> GetAll(int currentPage = 1, int pageSize = 5);
+
+        Task<List<Author>> GetAuthors();
 
         Task<Author> Update(Author author);
 

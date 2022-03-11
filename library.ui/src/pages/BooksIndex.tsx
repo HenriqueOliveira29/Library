@@ -30,16 +30,16 @@ const useStyles = makeStyles((theme) => ({
 
 function BooksIndex() {
   const classes = useStyles();
-  const [data, setData] = useState<PaginatedList<ListBookDTO>>(new PaginatedList<ListBookDTO>(false, "", "", [], 0));
+  const [data, setData] = useState<PaginatedList<ListBookDTO>>(new PaginatedList<ListBookDTO>(false, "", "", [], 0, true, false));
   const service = new BookService();
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [PageSize, setPageSize] = useState<number>(5);
 
   useEffect(() => {
 
     fetchData();
-  }, [isLoading]);
+  }, [isLoading, currentPage, PageSize]);
 
   const fetchData = async () => {
     var response = await service.GetAll(currentPage, PageSize)
@@ -58,6 +58,10 @@ function BooksIndex() {
   }
   const updateBook = (id: number) => {
     window.location.href = "/updateBook/" + id;
+  }
+
+  const handleChange = (event: unknown, page: number) => {
+    setCurrentPage(page);
   }
 
   return (
@@ -147,12 +151,11 @@ function BooksIndex() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
-              count={data.count}
-              rowsPerPage={PageSize}
+              count={data.totalRecords}
+              rowsPerPage={data.pageSize}
               page={currentPage}
-              onPageChange={() => { setCurrentPage(currentPage + 1) }}
+              onPageChange={handleChange}
               onRowsPerPageChange={(e) => { setPageSize(Number.parseInt(e.target.value)) }}
-
             />
 
           </Paper>

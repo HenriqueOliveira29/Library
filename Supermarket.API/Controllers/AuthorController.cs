@@ -17,11 +17,18 @@ namespace Supermarket.API.Controllers
            _authorService = authorService;
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("getAll")]
-        public async Task<MessageHelper<List<ListAuthorDTO>>> getAll() {
-            var result = await _authorService.GetAll();
+        public async Task<PaginateList<ListAuthorDTO>> getAll(SearchDTO search) {
+            var result = await _authorService.GetAll(search);
             return result;
+        }
+
+        [HttpGet]
+        [Route("getAuthors")]
+
+        public async Task<MessageHelper<List<ListAuthorDTO>>> getAuthors() {
+            return await _authorService.GetAuthors();
         }
 
         [HttpPost]

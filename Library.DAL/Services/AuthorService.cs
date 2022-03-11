@@ -82,18 +82,64 @@ namespace Library.DAL.Services
             return result;
         }
 
-        public async Task<MessageHelper<List<ListAuthorDTO>>> GetAll()
+        public async Task<PaginateList<ListAuthorDTO>> GetAll(SearchDTO search)
+        {
+            PaginateList<ListAuthorDTO> result = new PaginateList<ListAuthorDTO>();
+            try
+            {
+                if (search.PageSize > 100)
+                {
+                    search.PageSize = 100;
+                }
+
+                if (search.PageSize <= 0)
+                {
+                    search.PageSize = 1;
+                }
+
+                if (search.CurrentPage <= 0)
+                {
+                    search.CurrentPage = 1;
+                }
+
+                var responseRepository = await _authorRepository.GetAll(search.CurrentPage, search.PageSize);
+                result.Items = responseRepository.Items.Select(t => new ListAuthorDTO(t)).ToList();
+                result.Success = true;
+                result.TotalRecords = responseRepository.TotalRecords;
+                result.CurrentPage = responseRepository.CurrentPage;
+                result.PageSize = responseRepository.PageSize;
+
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                result.Success = false;
+                return result;
+            }
+        }
+
+        public async Task<MessageHelper<List<ListAuthorDTO>>> GetAuthors()
         {
             MessageHelper<List<ListAuthorDTO>> result = new MessageHelper<List<ListAuthorDTO>>();
-            try {
-                var responseRepository = await _authorRepository.GetAll();
-                var authors = responseRepository.Select(t => new ListAuthorDTO(t)).ToList();
+            try
+            {   
+                var authors = await _authorRepository.GetAuthors();
+                if (authors == null) {
+                    result.Message = "Erro";
+                    result.Sucess = false;
+                    return result;
+                }
+                result.obj = authors.Select(t => new ListAuthorDTO(t)).ToList();
                 result.Sucess = true;
-                result.obj = authors;
-            } catch (Exception ex) {
-                result.Sucess = false;
-                result.Message= ex.Message;
-                return result;
+
+            }
+            catch (Exception ex) {
+                   result.Message = ex.Message;
+                   result.Sucess = false;
+                   
+                   return result;
             }
             return result;
         }

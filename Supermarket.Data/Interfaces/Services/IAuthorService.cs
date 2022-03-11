@@ -10,7 +10,9 @@ namespace Supermarket.Data.Interfaces.Services
 {
     public interface IAuthorService
     {
-        Task<MessageHelper<List<ListAuthorDTO>>> GetAll();
+        Task<PaginateList<ListAuthorDTO>> GetAll(SearchDTO search);
+
+        Task<MessageHelper<List<ListAuthorDTO>>> GetAuthors(); 
 
         Task<MessageHelper> Create(CreateAuthorDTO createAuthor);
 

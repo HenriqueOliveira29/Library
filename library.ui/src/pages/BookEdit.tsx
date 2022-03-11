@@ -27,7 +27,7 @@ function BookEdit() {
     }, [LoadingAuthors])
 
     const getAuthors = async () => {
-        const response = authorService.GetAll().then((result) => {
+        const response = authorService.GetAuthors().then((result) => {
             setAuthors(result.obj);
             setLoadingAuthors(false);
         });
