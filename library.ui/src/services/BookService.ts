@@ -5,7 +5,7 @@ import { ListBookDTO } from "../models/books/ListBookDTO";
 import axios from "axios";
 import { PaginatedList } from "../helpers/PaginatedList";
 import { SearchDTO } from "../helpers/SeacrhDTO";
-import { Search } from "@material-ui/icons";
+import { Parameter } from "../helpers/Parameter";
 
 export class BookService{
     async Create(book: CreateBookDTO) : Promise<MessagingHelper<null>>{
@@ -24,10 +24,10 @@ export class BookService{
         }
     }
 
-    async GetAll(currentPage: number, PageSize: number) : Promise<PaginatedList<ListBookDTO>>{
+    async GetAll(currentPage: number, PageSize: number, Parameter: Parameter[]) : Promise<PaginatedList<ListBookDTO>>{
         
         try{
-            const search = new SearchDTO(currentPage+1, PageSize)
+            const search = new SearchDTO(currentPage+1, PageSize, Parameter)
             var response = await axios.post("https://localhost:5001/api/Books/getAll",{
                 ...search
             },{

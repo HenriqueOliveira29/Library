@@ -18,6 +18,7 @@ import { Link } from "react-router-dom";
 import { ListAuthorDTO } from '../models/authors/ListAuthorDTO';
 import { PaginatedList } from '../helpers/PaginatedList';
 import { TableFooter, TablePagination } from '@material-ui/core';
+import { Parameter } from '../helpers/Parameter';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 function AuthorIndex() {
     const classes = useStyles();
     const [data, setData] = useState<PaginatedList<ListAuthorDTO>>(new PaginatedList<ListAuthorDTO>(false, "", "", [], 0, true, false));
+    const [parameters, setParameters] = useState<Parameter[]>([]);
     const service = new AuthorService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -42,7 +44,7 @@ function AuthorIndex() {
     }, [isLoading])
 
     const fetchData = async () => {
-        var response = await service.GetAll(currentPage, PageSize)
+        var response = await service.GetAll(currentPage, PageSize, parameters)
             .then((result) => {
                 setData(result);
 

@@ -30,10 +30,39 @@ namespace Library.DAL.Repositories
             return true;
         }
 
-        public async Task<PaginateList<Book>> GetAll(int currentPage = 1, int pageSize = 5)
+        public async Task<PaginateList<Book>> GetAll(List<Parameter>? parameters, int currentPage = 1, int pageSize = 5)
         {
             PaginateList<Book> response = new PaginateList<Book>();
+           
             var query =  _context.Book.Include(t => t.Author).AsQueryable();
+
+            parameters = Parameter.VerParametros(new string[] {
+                "name", "price", "stockNumber", "author"}, parameters);
+
+            if (parameters.Count() > 0) {
+
+                foreach (var parameter in parameters) {
+                    if (parameter.Value != null) {
+
+                        switch (parameter.Name) {
+                              case "name":
+                                query = query.Where(t => t.Name.ToUpper().Contains(parameter.Value.ToUpper()));
+                                break;
+                              case "price":
+                                query = query.Where(t => t.Price.ToString() == parameter.Value);
+                                break;
+                            case "stockNumber":
+                                query = query.Where(t => t.StockNumber.ToString() == parameter.Value);
+                                break;
+                            case "author":
+                                query = query.Where(t => t.Author.Name.ToUpper().Contains(parameter.Value.ToUpper()));
+                                break;
+            
+                                
+                        }
+                    }
+                }
+            }
 
             response.TotalRecords = query.Count();
 

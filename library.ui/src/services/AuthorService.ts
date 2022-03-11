@@ -4,11 +4,12 @@ import { ListAuthorDTO } from "../models/authors/ListAuthorDTO";
 import { CreateAuthorDTO } from "../models/authors/CreateAuthorDTO";
 import { PaginatedList } from "../helpers/PaginatedList";
 import { SearchDTO } from "../helpers/SeacrhDTO";
+import { Parameter } from "../helpers/Parameter";
 
 export class AuthorService{
-    async GetAll(currentPage: number, PageSize: number) : Promise<PaginatedList<ListAuthorDTO>>{
+    async GetAll(currentPage: number, PageSize: number, Parameters: Parameter[]) : Promise<PaginatedList<ListAuthorDTO>>{
         try{
-            const search = new SearchDTO(currentPage+1, PageSize)
+            const search = new SearchDTO(currentPage+1, PageSize, Parameters)
             var response = await axios.post("https://localhost:5001/api/Author/getAll",{
                 ...search
             },{

@@ -14,7 +14,7 @@ namespace Supermarket.Data.Interfaces.Repository
 
         public Task<Book> Update(Book book);
 
-        public Task<PaginateList<Book>> GetAll(int currentPage = 1, int pageSize = 5);
+        public Task<PaginateList<Book>> GetAll(List<Parameter>? parameters,  int currentPage = 1, int pageSize = 5);
 
         public Task<Book> GetById(int id);
 

@@ -108,7 +108,14 @@ namespace Library.DAL.Services
                     search.CurrentPage = 1;
                 }
 
-                var responseRepository = await _bookRepository.GetAll(search.CurrentPage, search.PageSize);
+                var responseRepository = await _bookRepository.GetAll(search.Parameters, search.CurrentPage, search.PageSize);
+
+                if (responseRepository.Success != true) {
+                    result.Success = false;
+                    result.Message = "Erro ao buscar os livros";
+                    return result;
+                }
+
                 result.Items = responseRepository.Items.Select(t => new ListBookDTO(t)).ToList();
                 result.Success = true;
                 result.TotalRecords = responseRepository.TotalRecords;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { BookService } from '../services/BookService'
 import { ListBookDTO } from "../models/books/ListBookDTO";
-import { MessagingHelper } from "../helpers/MessagingHelper";
 import Appbar from '../Components/Navbar';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -19,6 +18,8 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { Link } from "react-router-dom";
 import { PaginatedList } from '../helpers/PaginatedList';
 import { TableFooter, TablePagination } from '@material-ui/core';
+import { Parameter } from '../helpers/Parameter';
+import styled from 'styled-components';
 
 const useStyles = makeStyles((theme) => ({
   root: { flexGrow: 1 },
@@ -31,18 +32,18 @@ const useStyles = makeStyles((theme) => ({
 function BooksIndex() {
   const classes = useStyles();
   const [data, setData] = useState<PaginatedList<ListBookDTO>>(new PaginatedList<ListBookDTO>(false, "", "", [], 0, true, false));
+  const [parameters, setParameters] = useState<Parameter[]>([]);
   const service = new BookService();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [PageSize, setPageSize] = useState<number>(5);
 
   useEffect(() => {
-
     fetchData();
   }, [isLoading, currentPage, PageSize]);
 
   const fetchData = async () => {
-    var response = await service.GetAll(currentPage, PageSize)
+    var response = await service.GetAll(currentPage, PageSize, parameters)
       .then((result) => {
         setData(result)
         console.log(result);
@@ -67,8 +68,28 @@ function BooksIndex() {
   return (
     <div>
       <Appbar></Appbar>
+
       <div className={classes.root}>
         <Container className={classes.container} maxWidth='lg'>
+          <Search>
+            <ItemSearch>
+              <Text>Pesquisa por nome</Text>
+              <Input type="text" name="name"></Input>
+            </ItemSearch>
+            <ItemSearch>
+              <Text>Pesquisa por preco</Text>
+              <Input type="number" name="price"></Input>
+            </ItemSearch>
+            <ItemSearch>
+              <Text>Pesquisa por stock</Text>
+              <Input type="number" name="stockNumber"></Input>
+            </ItemSearch>
+            <ItemSearch>
+              <Text>Pesquisa por autor</Text>
+              <Input type="text" name="author"></Input>
+            </ItemSearch>
+          </Search>
+
           <Paper className={classes.paper}>
             <Box display='flex'>
               <Box flexGrow={1}>
@@ -170,3 +191,35 @@ function BooksIndex() {
 
 
 export default BooksIndex
+
+
+const Search = styled.div`
+  width: 100%;
+  margin: 20px 0px;
+  display: flex;
+  justify-content: space-evenly;
+`
+
+
+
+const ItemSearch = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  
+`
+
+const Input = styled.input`
+  width: 100%;
+  border-radius: 10px;
+  border: solid 1px gray;
+  padding: 5px;
+  margin: 5px 0px;
+`
+
+const Text = styled.label`
+  color: gray;
+  font-weight: 500;
+
+`
+
