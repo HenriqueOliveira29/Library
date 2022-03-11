@@ -108,9 +108,13 @@ namespace Library.DAL.Services
                     search.CurrentPage = 1;
                 }
 
-                var reponseRepository = await _bookRepository.GetAll(search.CurrentPage, search.PageSize);
-                result.Items = reponseRepository.Items.Select(t => new ListBookDTO(t)).ToList(); ;
+                var responseRepository = await _bookRepository.GetAll(search.CurrentPage, search.PageSize);
+                result.Items = responseRepository.Items.Select(t => new ListBookDTO(t)).ToList();
                 result.Success = true;
+                result.TotalRecords = responseRepository.TotalRecords;
+                result.CurrentPage = responseRepository.CurrentPage;
+                result.PageSize = responseRepository.PageSize;
+                
                
                 return result;
                 

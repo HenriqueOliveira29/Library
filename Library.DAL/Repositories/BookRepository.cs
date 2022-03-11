@@ -35,14 +35,15 @@ namespace Library.DAL.Repositories
             PaginateList<Book> response = new PaginateList<Book>();
             var query =  _context.Book.Include(t => t.Author).AsQueryable();
 
-            
+            response.TotalRecords = query.Count();
+
             var numberOfItemsToSkip = pageSize * (currentPage - 1);
             query = query.Skip(numberOfItemsToSkip);
             query = query.Take(pageSize);
 
             var list = await query.ToListAsync();
 
-            response.TotalRecords = await query.CountAsync();
+           
             response.Items = list;
             response.CurrentPage = currentPage;
             response.PageSize = pageSize;
