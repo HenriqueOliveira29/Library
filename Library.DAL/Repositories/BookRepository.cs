@@ -49,10 +49,10 @@ namespace Library.DAL.Repositories
                                 query = query.Where(t => t.Name.ToUpper().Contains(parameter.Value.ToUpper()));
                                 break;
                               case "price":
-                                query = query.Where(t => t.Price.ToString() == parameter.Value);
+                                query = query.Where(t => t.Price.ToString().Contains(parameter.Value));
                                 break;
                             case "stockNumber":
-                                query = query.Where(t => t.StockNumber.ToString() == parameter.Value);
+                                query = query.Where(t => t.StockNumber.ToString().Contains(parameter.Value));
                                 break;
                             case "author":
                                 query = query.Where(t => t.Author.Name.ToUpper().Contains(parameter.Value.ToUpper()));

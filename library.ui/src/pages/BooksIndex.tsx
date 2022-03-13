@@ -38,12 +38,19 @@ function BooksIndex() {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [PageSize, setPageSize] = useState<number>(5);
 
-  useEffect(() => {
-    fetchData();
-  }, [isLoading, currentPage, PageSize]);
+  const [name, setName] = useState<String>("");
+  const [price, setPrice] = useState<string>("");
+  const [stockNumber, setStockNumber] = useState<string>("");
+  const [author, setAuthor] = useState<String>("");
 
-  const fetchData = async () => {
-    var response = await service.GetAll(currentPage, PageSize, parameters)
+
+
+  useEffect(() => {
+    fetchData(parameters);
+  }, [isLoading, currentPage, PageSize, parameters]);
+
+  const fetchData = async (searchParameters: Parameter[]) => {
+    var response = await service.GetAll(currentPage, PageSize, searchParameters)
       .then((result) => {
         setData(result)
         console.log(result);
@@ -54,7 +61,7 @@ function BooksIndex() {
   const deleteBook = async (id: number) => {
     var response = await service.Delete(id);
     if (response.sucess == true) {
-      fetchData();
+      fetchData(parameters);
     }
   }
   const updateBook = (id: number) => {
@@ -63,6 +70,28 @@ function BooksIndex() {
 
   const handleChange = (event: unknown, page: number) => {
     setCurrentPage(page);
+  }
+
+  const buttonhandleClick = async () => {
+    var parametersSearch: Parameter[] = [];
+    if (name != null) {
+      var parameter: Parameter = new Parameter("name", name);
+      parametersSearch.push(parameter);
+    }
+    if (price != null) {
+      var parameter: Parameter = new Parameter("price", price);
+      parametersSearch.push(parameter);
+    }
+    if (stockNumber != null) {
+      var parameter: Parameter = new Parameter("stockNumber", stockNumber);
+      parametersSearch.push(parameter);
+    }
+    if (author != null) {
+      var parameter: Parameter = new Parameter("author", author);
+      parametersSearch.push(parameter);
+    }
+
+    await setParameters(parametersSearch);
   }
 
   return (
@@ -74,20 +103,26 @@ function BooksIndex() {
           <Search>
             <ItemSearch>
               <Text>Pesquisa por nome</Text>
-              <Input type="text" name="name"></Input>
+              <Input type="text" name="name" onChange={(e) => { setName(e.target.value) }}></Input>
             </ItemSearch>
             <ItemSearch>
               <Text>Pesquisa por preco</Text>
-              <Input type="number" name="price"></Input>
+              <Input type="number" name="price" onChange={(e) => { setPrice(e.target.value) }}></Input>
             </ItemSearch>
             <ItemSearch>
               <Text>Pesquisa por stock</Text>
-              <Input type="number" name="stockNumber"></Input>
+              <Input type="number" name="stockNumber" onChange={(e) => { setStockNumber(e.target.value) }}></Input>
             </ItemSearch>
             <ItemSearch>
               <Text>Pesquisa por autor</Text>
-              <Input type="text" name="author"></Input>
+              <Input type="text" name="author" onChange={(e) => { setAuthor(e.target.value) }} ></Input>
             </ItemSearch>
+            <ButtonSearch onClick={() => { buttonhandleClick() }}>
+              Search
+            </ButtonSearch>
+            <ButtonSearch onClick={() => { setParameters([]) }}>
+              Clear Search
+            </ButtonSearch>
           </Search>
 
           <Paper className={classes.paper}>
@@ -198,6 +233,7 @@ const Search = styled.div`
   margin: 20px 0px;
   display: flex;
   justify-content: space-evenly;
+  align-items: center;
 `
 
 
@@ -221,5 +257,21 @@ const Text = styled.label`
   color: gray;
   font-weight: 500;
 
+`
+
+const ButtonSearch = styled.div`
+  width: 10%;
+  height: 20%;
+  background-color: #fb8500;
+  padding: 10px;
+  margin: 0px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  transition: 0.3s;
+  :hover{
+    cursor:pointer;
+    background-color: #faa307;
+  }
 `
 
