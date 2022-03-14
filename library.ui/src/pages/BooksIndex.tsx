@@ -86,7 +86,7 @@ function BooksIndex() {
   const buttonhandleClick = async () => {
     var parametersSearch: Parameter[] = [];
     if (name != null) {
-      var parameter: Parameter = new Parameter("name", name);
+      var parameter: Parameter = new Parameter("name", name.trim());
       parametersSearch.push(parameter);
     }
     if (price != null) {
@@ -98,7 +98,7 @@ function BooksIndex() {
       parametersSearch.push(parameter);
     }
     if (author != null) {
-      var parameter: Parameter = new Parameter("author", author);
+      var parameter: Parameter = new Parameter("author", author.trim());
       parametersSearch.push(parameter);
     }
 

@@ -79,7 +79,7 @@ function AuthorIndex() {
     const buttonhandleClick = async () => {
         var parametersSearch: Parameter[] = [];
         if (name != null) {
-            var parameter: Parameter = new Parameter("name", name);
+            var parameter: Parameter = new Parameter("name", name.trim());
             parametersSearch.push(parameter);
         }
 
