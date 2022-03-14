@@ -7,6 +7,8 @@ import { BookService } from '../services/BookService';
 import { AuthorService } from '../services/AuthorService';
 import Appbar from '../Components/Navbar';
 import styled from 'styled-components';
+import { servicesVersion } from 'typescript';
+import { EditBookDTO } from '../models/books/EditBookDTO';
 
 function BookEdit() {
     const authorService = new AuthorService();
@@ -41,11 +43,29 @@ function BookEdit() {
         const response = await service.getById(Number.parseInt(id)).then((result) => {
             if (result.obj != null) {
                 setBook(result.obj);
+
             }
 
         });
         console.log(book);
         setIsLoading(false);
+    }
+
+    const updateBook = async () => {
+        const Bookdata: EditBookDTO = {
+            Id: book.id,
+            Name: book.name,
+            Description: book.description,
+            Price: book.price,
+            StockNumber: book.stockNumber,
+            AuthorId: book.authorID,
+        }
+        const response = await service.update(Bookdata).then((result) => {
+            if (result.sucess == true) {
+                window.location.href = "/";
+            }
+        })
+
     }
 
     return (
@@ -55,18 +75,19 @@ function BookEdit() {
                 <Title>
                     <h1>Update Book</h1>
                 </Title>
+
                 <Inputs>
 
-                    <Input type="text" onChange={(element) => setBook({ ...book, Name: element.target.value })} placeholder="Nome do Livro" value={book.Name}>
+                    <Input type="text" onChange={(element) => setBook({ ...book, name: element.target.value })} placeholder="Nome do Livro" value={book.name}>
                     </Input>
-                    <Input type="text" onChange={(element) => setBook({ ...book, Description: element.target.value })} placeholder="Descricao" value={book.Description}>
+                    <Input type="text" onChange={(element) => setBook({ ...book, description: element.target.value })} placeholder="Descricao" value={book.description}>
                     </Input>
-                    <Select name='autor' onChange={(element) => setBook({ ...book, AuthorID: Number.parseInt(element.target.value) })}>
+                    <Select name='autor' onChange={(element) => setBook({ ...book, authorID: Number.parseInt(element.target.value) })}>
 
                         {
                             authors.map((author) => {
                                 return (
-                                    (author.authorId == book.AuthorID) ?
+                                    (author.authorId == book.authorID) ?
                                         <option value={author.authorId} key={author.authorId} selected >{author.name}</option> :
                                         <option value={author.authorId} key={author.authorId}>{author.name}</option>
 
@@ -76,15 +97,17 @@ function BookEdit() {
 
 
                     </Select>
-                    <Input type="number" onChange={(element) => setBook({ ...book, Price: Number.parseInt(element.target.value) })} placeholder="Preco" value={book.Price}>
+                    <Input type="number" onChange={(element) => setBook({ ...book, price: Number.parseInt(element.target.value) })} placeholder="Preco" value={book.price}>
                     </Input>
-                    <Input type="number" onChange={(element) => setBook({ ...book, StockNumber: Number.parseInt(element.target.value) })} placeholder="Stock" value={book.StockNumber}>
+                    <Input type="number" onChange={(element) => setBook({ ...book, stockNumber: Number.parseInt(element.target.value) })} placeholder="Stock" value={book.stockNumber}>
                     </Input>
-                    <Button onClick={() => { console.log("ola") }}>
+                    <Button onClick={() => { updateBook() }}>
                         Update
                     </Button>
 
                 </Inputs>
+
+
 
             </Container>
 

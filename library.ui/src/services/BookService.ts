@@ -6,6 +6,7 @@ import axios from "axios";
 import { PaginatedList } from "../helpers/PaginatedList";
 import { SearchDTO } from "../helpers/SeacrhDTO";
 import { Parameter } from "../helpers/Parameter";
+import { EditBookDTO } from "../models/books/EditBookDTO";
 
 export class BookService{
     async Create(book: CreateBookDTO) : Promise<MessagingHelper<null>>{
@@ -60,6 +61,22 @@ export class BookService{
             return response.data;
         }catch (error){
             return new MessagingHelper<BookDTO | null>(false, "erro ao encontrar o livro", null);
+        }
+    }
+
+    async update(book: EditBookDTO) : Promise<MessagingHelper<BookDTO | null>>{
+        try{
+            var response = await axios.post("https://localhost:5001/api/Books/update",{
+                ...book
+            },{
+                headers:{
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                }
+            });
+            return response.data;
+        }catch (error){
+            return new MessagingHelper<BookDTO | null>(false, "erro ao editar o livro", null);
         }
     }
 }

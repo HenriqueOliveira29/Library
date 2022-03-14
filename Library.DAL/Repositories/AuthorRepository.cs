@@ -32,10 +32,28 @@ namespace Library.DAL.Repositories
             return true;
         }
 
-        public async Task<PaginateList<Author>> GetAll(int currentPage = 1, int pageSize = 5)
+        public async Task<PaginateList<Author>> GetAll(List<Parameter> parameters, int currentPage = 1, int pageSize = 5)
         {
             PaginateList<Author> response = new PaginateList<Author>();
+
             var query = _context.Author.Include(t=>t.Books).AsQueryable();
+
+            parameters = Parameter.VerParametros(new string[] { "name" }, parameters);
+
+            if (parameters.Count() > 0) {
+
+                foreach (var parameter in parameters) {
+                    if (parameter.Value != null) {
+                        switch (parameter.Name) {
+                            case "name":
+                                query = query.Where(t => t.Name.ToUpper().Contains(parameter.Value.ToUpper()));
+                                break;
+                        }
+                    }
+                }
+            }
+
+
 
             response.TotalRecords = query.Count();
 

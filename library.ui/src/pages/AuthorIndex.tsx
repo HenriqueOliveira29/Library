@@ -19,6 +19,7 @@ import { ListAuthorDTO } from '../models/authors/ListAuthorDTO';
 import { PaginatedList } from '../helpers/PaginatedList';
 import { TableFooter, TablePagination } from '@material-ui/core';
 import { Parameter } from '../helpers/Parameter';
+import styled from 'styled-components';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,10 +39,11 @@ function AuthorIndex() {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [PageSize, setPageSize] = useState<number>(5);
 
-    useEffect(() => {
+    const [name, setName] = useState<string>("");
 
+    useEffect(() => {
         fetchData();
-    }, [isLoading])
+    }, [isLoading, parameters, currentPage, PageSize])
 
     const fetchData = async () => {
         var response = await service.GetAll(currentPage, PageSize, parameters)
@@ -60,8 +62,22 @@ function AuthorIndex() {
         }
     }
 
+    const updateAuthor = async (id: number) => {
+        window.location.href = "/updateAuthor/" + id;
+    }
+
     const handleChange = (event: unknown, page: number) => {
         setCurrentPage(page);
+    }
+
+    const buttonhandleClick = async () => {
+        var parametersSearch: Parameter[] = [];
+        if (name != null) {
+            var parameter: Parameter = new Parameter("name", name);
+            parametersSearch.push(parameter);
+        }
+
+        await setParameters(parametersSearch);
     }
 
     return (
@@ -69,6 +85,21 @@ function AuthorIndex() {
             <Appbar></Appbar>
             <div className={classes.root}>
                 <Container className={classes.container} maxWidth='lg'>
+                    <Search>
+                        <ItemSearch>
+                            <Text>Search by name</Text>
+                            <Input type="text" name="name" onChange={(e) => { setName(e.target.value) }}></Input>
+                        </ItemSearch>
+                        <ButtonContainer>
+                            <ButtonSearch onClick={() => { buttonhandleClick() }}>
+                                Search
+                            </ButtonSearch>
+                            <ButtonSearch onClick={() => { setParameters([]) }}>
+                                Clear Search
+                            </ButtonSearch>
+                        </ButtonContainer>
+
+                    </Search>
                     <Paper className={classes.paper}>
                         <Box display='flex'>
                             <Box flexGrow={1}>
@@ -128,7 +159,7 @@ function AuthorIndex() {
 
                                                 <TableCell align="center">
                                                     <ButtonGroup aria-label="buttons" style={{ color: "#fb8500" }}>
-                                                        <Button onClick={() => { /*updateBook(book.id)*/  console.log("ola") }} style={{ color: "#fb8500" }}>
+                                                        <Button onClick={() => { updateAuthor(author.authorId) }} style={{ color: "#fb8500" }}>
                                                             Edit
                                                         </Button>
                                                         {(author.bookNumber < 1) ?
@@ -165,3 +196,57 @@ function AuthorIndex() {
 }
 
 export default AuthorIndex
+
+const Search = styled.div`
+  width: 100%;
+  margin: 20px 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`
+
+
+
+const ItemSearch = styled.div`
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  
+`
+
+const Input = styled.input`
+  width: 100%;
+  border-radius: 10px;
+  border: solid 1px gray;
+  padding: 5px;
+  margin: 5px 0px;
+`
+
+const Text = styled.label`
+  color: gray;
+  font-weight: 500;
+
+`
+const ButtonContainer = styled.div`
+    width: 25%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+   
+`
+
+const ButtonSearch = styled.div`
+  width: 40%;
+  height: 20%;
+  background-color: #fb8500;
+  padding: 10px;
+  margin: 0px;
+  border-radius: 10px;
+  color: white;
+  font-weight: 700;
+  transition: 0.3s;
+  :hover{
+    cursor:pointer;
+    background-color: #faa307;
+  }
+`

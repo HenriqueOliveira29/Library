@@ -1,10 +1,10 @@
 export class BookDTO{
-    Id: number = 0;
-    Name: string = "";
-    Price: number = 0;
-    Description: string = "";
-    StockNumber: number = 0;
-    AuthorName: string = "";
-    AuthorID:number = 0;
+    id: number = 0;
+    name: string = "";
+    price: number = 0;
+    description: string = "";
+    stockNumber: number = 0;
+    authorName: string = "";
+    authorID:number = 0;
 
 }

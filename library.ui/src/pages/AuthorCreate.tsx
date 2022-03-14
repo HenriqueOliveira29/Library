@@ -74,7 +74,6 @@ const Input = styled.input`
 `
 
 const Button = styled.button`
-    
     padding: 10px;
     width: 10rem;
     border-radius: 10px;

@@ -52,9 +52,12 @@ function BooksIndex() {
   const fetchData = async (searchParameters: Parameter[]) => {
     var response = await service.GetAll(currentPage, PageSize, searchParameters)
       .then((result) => {
-        setData(result)
-        console.log(result);
-
+        if (result.success == false) {
+          alert(result.message);
+        }
+        else {
+          setData(result)
+        }
       })
     setIsLoading(false);
   };

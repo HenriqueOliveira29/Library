@@ -1,0 +1,7 @@
+export class AuthorDTO{
+    authorId: number = 0;
+    name: string = "";
+    birthDate: Date = new Date();
+    deadDate: Date = new Date();
+    bookNumber: number = 0;
+}

@@ -38,7 +38,7 @@ namespace Library.DAL.Services
 
                 if (author == null) {
                     result.Sucess = false;
-                    result.Message = "Autor criado com sucesso";
+                    result.Message = "Nao foi possivel criar o autor";
                     return result;
                 }
                 result.Sucess = true;
@@ -102,7 +102,7 @@ namespace Library.DAL.Services
                     search.CurrentPage = 1;
                 }
 
-                var responseRepository = await _authorRepository.GetAll(search.CurrentPage, search.PageSize);
+                var responseRepository = await _authorRepository.GetAll(search.Parameters, search.CurrentPage, search.PageSize);
                 result.Items = responseRepository.Items.Select(t => new ListAuthorDTO(t)).ToList();
                 result.Success = true;
                 result.TotalRecords = responseRepository.TotalRecords;

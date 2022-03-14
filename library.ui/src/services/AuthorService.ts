@@ -5,6 +5,9 @@ import { CreateAuthorDTO } from "../models/authors/CreateAuthorDTO";
 import { PaginatedList } from "../helpers/PaginatedList";
 import { SearchDTO } from "../helpers/SeacrhDTO";
 import { Parameter } from "../helpers/Parameter";
+import { AuthorDTO } from "../models/authors/AuthorDTO";
+import { EditBookDTO } from "../models/books/EditBookDTO";
+import { EditAuthorDTO } from "../models/authors/EditAuthor";
 
 export class AuthorService{
     async GetAll(currentPage: number, PageSize: number, Parameters: Parameter[]) : Promise<PaginatedList<ListAuthorDTO>>{
@@ -66,6 +69,31 @@ export class AuthorService{
             return response.data;
         }catch(error){
             return new MessagingHelper<null>(false, "Erro ao criar o author", null);
+        }
+    }
+
+    async GetById(id: number) : Promise<MessagingHelper<AuthorDTO | null>>{
+        try{
+            var response = await axios.get("https://localhost:5001/api/Author/" + id);
+            return response.data;
+        }catch(error){
+            return new MessagingHelper<AuthorDTO | null>(false, "Erro ao pesquisar o autor", null);
+        }
+    }
+
+    async Update(author: EditAuthorDTO) : Promise<MessagingHelper<AuthorDTO | null>>{
+        try{
+            var response = await axios.post("https://localhost:5001/api/Author/update", {
+                ...author
+            },{
+                headers:{
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                }
+            });
+            return response.data;
+        }catch(error){
+            return new MessagingHelper<AuthorDTO | null>(false, "Erro ao editar o autor", null);
         }
     }
 }
