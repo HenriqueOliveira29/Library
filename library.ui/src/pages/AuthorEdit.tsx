@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { EditAuthorDTO } from "../models/authors/EditAuthor";
 import dateFormat from 'dateformat';
+import Toast from '../helpers/Toast';
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -25,7 +27,9 @@ function AuthorEdit() {
             if (result.sucess == true && result.obj != null) {
                 setAuthor(result.obj);
                 setLoading(false);
-
+            }
+            else {
+                Toast.Show('error', result.message)
             }
         })
     }
@@ -58,7 +62,10 @@ function AuthorEdit() {
         }
         var response = service.Update(AuthorData).then((result) => {
             if (result.sucess == true) {
-                window.location.href = "/author";
+                Toast.Show('success', 'atualizado com sucesso')
+            }
+            else {
+                Toast.Show('error', result.message)
             }
         })
 
@@ -67,6 +74,7 @@ function AuthorEdit() {
     return (
         <div>
             <Appbar></Appbar>
+            <ToastContainer />
             <Container>
                 <Title>
                     <h1>Create Book</h1>

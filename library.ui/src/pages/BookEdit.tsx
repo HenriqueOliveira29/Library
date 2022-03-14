@@ -9,6 +9,7 @@ import Appbar from '../Components/Navbar';
 import styled from 'styled-components';
 import { servicesVersion } from 'typescript';
 import { EditBookDTO } from '../models/books/EditBookDTO';
+import Toast from '../helpers/Toast';
 
 function BookEdit() {
     const authorService = new AuthorService();
@@ -46,6 +47,7 @@ function BookEdit() {
 
             }
 
+
         });
         console.log(book);
         setIsLoading(false);
@@ -62,8 +64,11 @@ function BookEdit() {
         }
         const response = await service.update(Bookdata).then((result) => {
             if (result.sucess == true) {
+                Toast.Show("success", "Criado com sucesso")
                 window.location.href = "/";
             }
+            Toast.Show("error", result.message)
+
         })
 
     }
@@ -75,27 +80,21 @@ function BookEdit() {
                 <Title>
                     <h1>Update Book</h1>
                 </Title>
-
                 <Inputs>
-
                     <Input type="text" onChange={(element) => setBook({ ...book, name: element.target.value })} placeholder="Nome do Livro" value={book.name}>
                     </Input>
                     <Input type="text" onChange={(element) => setBook({ ...book, description: element.target.value })} placeholder="Descricao" value={book.description}>
                     </Input>
                     <Select name='autor' onChange={(element) => setBook({ ...book, authorID: Number.parseInt(element.target.value) })}>
-
                         {
                             authors.map((author) => {
                                 return (
                                     (author.authorId == book.authorID) ?
                                         <option value={author.authorId} key={author.authorId} selected >{author.name}</option> :
                                         <option value={author.authorId} key={author.authorId}>{author.name}</option>
-
                                 )
                             })
                         }
-
-
                     </Select>
                     <Input type="number" onChange={(element) => setBook({ ...book, price: Number.parseInt(element.target.value) })} placeholder="Preco" value={book.price}>
                     </Input>

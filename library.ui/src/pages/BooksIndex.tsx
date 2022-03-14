@@ -20,6 +20,8 @@ import { PaginatedList } from '../helpers/PaginatedList';
 import { TableFooter, TablePagination } from '@material-ui/core';
 import { Parameter } from '../helpers/Parameter';
 import styled from 'styled-components';
+import Toast from '../helpers/Toast';
+import { ToastContainer, toast } from 'react-toastify';
 
 const useStyles = makeStyles((theme) => ({
   root: { flexGrow: 1 },
@@ -30,6 +32,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function BooksIndex() {
+
   const classes = useStyles();
   const [data, setData] = useState<PaginatedList<ListBookDTO>>(new PaginatedList<ListBookDTO>(false, "", "", [], 0, true, false));
   const [parameters, setParameters] = useState<Parameter[]>([]);
@@ -53,11 +56,12 @@ function BooksIndex() {
     var response = await service.GetAll(currentPage, PageSize, searchParameters)
       .then((result) => {
         if (result.success == false) {
-          alert(result.message);
+          Toast.Show("error", result.message)
         }
         else {
           setData(result)
         }
+
       })
     setIsLoading(false);
   };
@@ -65,6 +69,10 @@ function BooksIndex() {
     var response = await service.Delete(id);
     if (response.sucess == true) {
       fetchData(parameters);
+      Toast.Show("success", "Livro eliminado com sucesso");
+    }
+    else {
+      Toast.Show("error", "livro nao foi eliminado");
     }
   }
   const updateBook = (id: number) => {
@@ -100,7 +108,7 @@ function BooksIndex() {
   return (
     <div>
       <Appbar></Appbar>
-
+      <ToastContainer />
       <div className={classes.root}>
         <Container className={classes.container} maxWidth='lg'>
           <Search>

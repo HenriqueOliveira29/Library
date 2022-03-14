@@ -3,6 +3,8 @@ import Appbar from '../Components/Navbar'
 import { AuthorService } from '../services/AuthorService';
 import { CreateAuthorDTO } from '../models/authors/CreateAuthorDTO';
 import styled from 'styled-components';
+import Toast from '../helpers/Toast';
+import { ToastContainer } from 'react-toastify';
 
 
 function AuthorCreate() {
@@ -20,14 +22,15 @@ function AuthorCreate() {
         setLoading(false);
 
         if (response.sucess !== true) {
-            console.log("Inserido com sucesso", response.message);
+            Toast.Show("error", response.message)
             return;
         }
-        console.log("success", "Author criado com sucesso");
+        Toast.Show("success", "Autor criado com sucesso");
     }
     return (
         <div>
             <Appbar></Appbar>
+            <ToastContainer />
             <Container>
                 <Title>
                     <h1>Create Book</h1>

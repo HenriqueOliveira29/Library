@@ -7,6 +7,8 @@ import { BookService } from '../services/BookService'
 import { Alert } from 'reactstrap';
 import { AuthorService } from '../services/AuthorService';
 import { ListAuthorDTO } from '../models/authors/ListAuthorDTO';
+import Toast from '../helpers/Toast';
+import { ToastContainer } from 'react-toastify';
 
 function BookCreate() {
     const service = new BookService();
@@ -25,15 +27,14 @@ function BookCreate() {
         setLoading(false);
 
         if (response.sucess !== true) {
-            console.log("Inserido com sucesso", response.message);
+            Toast.Show("error", response.message);
             return;
         }
-        console.log("success", "Livro criado com sucesso");
+        Toast.Show("success", "livro criado com sucesso");
     }
 
     useEffect(() => {
         getAuthors();
-        console.log(authors);
     }, [LoadingAuthors])
 
     const getAuthors = async () => {
@@ -47,6 +48,7 @@ function BookCreate() {
     return (
         <div>
             <Appbar></Appbar>
+            <ToastContainer />
             <Container>
                 <Title>
                     <h1>Create Book</h1>
@@ -61,7 +63,7 @@ function BookCreate() {
                         {
                             authors.map((author) => {
                                 return (
-                                    <option value={author.authorId}>{author.name}</option>
+                                    <option value={author.authorId} key={author.authorId}>{author.name}</option>
                                 )
                             })
                         }

@@ -20,6 +20,8 @@ import { PaginatedList } from '../helpers/PaginatedList';
 import { TableFooter, TablePagination } from '@material-ui/core';
 import { Parameter } from '../helpers/Parameter';
 import styled from 'styled-components';
+import Toast from '../helpers/Toast';
+import { ToastContainer } from 'react-toastify';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -58,7 +60,11 @@ function AuthorIndex() {
 
         var response = await service.Delete(id);
         if (response.sucess == true) {
+            Toast.Show("success", response.message);
             fetchData();
+        }
+        else {
+            Toast.Show("error", response.message)
         }
     }
 
@@ -83,6 +89,7 @@ function AuthorIndex() {
     return (
         <div>
             <Appbar></Appbar>
+            <ToastContainer />
             <div className={classes.root}>
                 <Container className={classes.container} maxWidth='lg'>
                     <Search>
