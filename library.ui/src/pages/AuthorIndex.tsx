@@ -87,6 +87,29 @@ function AuthorIndex() {
         await setParameters(parametersSearch);
     }
 
+    const headerHandleClick = async (value: string) => {
+        var parameterOrder: Parameter[] = orderParameters;
+        var parameter: Parameter = new Parameter(value, "ASC");
+        var found = false;
+        await parameterOrder.map((element) => {
+            if (element.name == value) {
+                found = true;
+                if (element.value == "DESC") {
+                    parameterOrder = parameterOrder.filter((e) => e.name !== element.name)
+                }
+                if (element.value == "ASC") {
+                    element.value = "DESC"
+                }
+            }
+        });
+
+        if (found == false) {
+            parameterOrder.unshift(parameter);
+        }
+        await setOrderParameters(parameterOrder);
+        fetchData()
+    }
+
     return (
         <div>
             <Appbar></Appbar>
@@ -130,16 +153,16 @@ function AuthorIndex() {
                                         <TableCell align="right">
                                             ID
                                         </TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align="right" aria-label="name" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
                                             Name
                                         </TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align="right" aria-label="birthDate" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
                                             BirthDate
                                         </TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align="right" aria-label="deadDate" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
                                             DeadDate
                                         </TableCell>
-                                        <TableCell align="right">
+                                        <TableCell align="right" aria-label="numberBook" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
                                             Numero de livros
                                         </TableCell>
 

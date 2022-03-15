@@ -128,7 +128,6 @@ function BooksIndex() {
     }
     await setOrderParameters(parameterOrder);
     fetchData()
-
   }
 
 
@@ -188,16 +187,16 @@ function BooksIndex() {
                     <TableCell align="right">
                       ID
                     </TableCell>
-                    <TableCell align="right" aria-label="name" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }}>
+                    <TableCell align="right" aria-label="name" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
                       Name
                     </TableCell>
-                    <TableCell align="right" aria-label="price" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }}>
+                    <TableCell align="right" aria-label="price" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
                       Price
                     </TableCell>
-                    <TableCell align="right" aria-label="stockNumber" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }}>
+                    <TableCell align="right" aria-label="stockNumber" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
                       Stock
                     </TableCell>
-                    <TableCell align="right" aria-label="author" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }}>
+                    <TableCell align="right" aria-label="author" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
                       Nome Autor
                     </TableCell>
                     <TableCell align="right">
