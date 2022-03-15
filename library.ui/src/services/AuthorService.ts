@@ -10,9 +10,9 @@ import { EditBookDTO } from "../models/books/EditBookDTO";
 import { EditAuthorDTO } from "../models/authors/EditAuthor";
 
 export class AuthorService{
-    async GetAll(currentPage: number, PageSize: number, Parameters: Parameter[]) : Promise<PaginatedList<ListAuthorDTO>>{
+    async GetAll(currentPage: number, PageSize: number, searchParameter: Parameter[], OrderByParameter: Parameter[] ) : Promise<PaginatedList<ListAuthorDTO>>{
         try{
-            const search = new SearchDTO(currentPage+1, PageSize, Parameters)
+            const search = new SearchDTO(currentPage+1, PageSize, searchParameter, OrderByParameter)
             var response = await axios.post("https://localhost:5001/api/Author/getAll",{
                 ...search
             },{

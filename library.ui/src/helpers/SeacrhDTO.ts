@@ -4,11 +4,14 @@ export class SearchDTO{
 
     CurrentPage: number;
     PageSize: number;
-    Parameters: Parameter[];
+    SearchBy: Parameter[];
+    OrderBy: Parameter[];
 
-    constructor(currentp: number, pagesize: number, parameters: Parameter[]){
+
+    constructor(currentp: number, pagesize: number, searchBy: Parameter[], orderBy: Parameter[]){
         this.CurrentPage = currentp;
         this.PageSize = pagesize;
-        this.Parameters = parameters
+        this.SearchBy = searchBy;
+        this.OrderBy = orderBy;
     }
 }

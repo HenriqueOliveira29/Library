@@ -36,6 +36,7 @@ function AuthorIndex() {
     const classes = useStyles();
     const [data, setData] = useState<PaginatedList<ListAuthorDTO>>(new PaginatedList<ListAuthorDTO>(false, "", "", [], 0, true, false));
     const [parameters, setParameters] = useState<Parameter[]>([]);
+    const [orderParameters, setOrderParameters] = useState<Parameter[]>([]);
     const service = new AuthorService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -45,10 +46,10 @@ function AuthorIndex() {
 
     useEffect(() => {
         fetchData();
-    }, [isLoading, parameters, currentPage, PageSize])
+    }, [isLoading, parameters, currentPage, PageSize, orderParameters])
 
     const fetchData = async () => {
-        var response = await service.GetAll(currentPage, PageSize, parameters)
+        var response = await service.GetAll(currentPage, PageSize, parameters, orderParameters)
             .then((result) => {
                 setData(result);
 

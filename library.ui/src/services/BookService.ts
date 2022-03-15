@@ -25,10 +25,10 @@ export class BookService{
         }
     }
 
-    async GetAll(currentPage: number, PageSize: number, Parameter: Parameter[]) : Promise<PaginatedList<ListBookDTO>>{
+    async GetAll(currentPage: number, PageSize: number, searchParameter: Parameter[], OrderByParameter: Parameter[]) : Promise<PaginatedList<ListBookDTO>>{
         
         try{
-            const search = new SearchDTO(currentPage+1, PageSize, Parameter)
+            const search = new SearchDTO(currentPage+1, PageSize, searchParameter, OrderByParameter)
             var response = await axios.post("https://localhost:5001/api/Books/getAll",{
                 ...search
             },{
@@ -37,6 +37,7 @@ export class BookService{
                     "Content-Type": "application/json",
                 }
             });
+            console.log(response.data)
             return response.data
             
   

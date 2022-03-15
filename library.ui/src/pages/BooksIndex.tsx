@@ -22,6 +22,7 @@ import { Parameter } from '../helpers/Parameter';
 import styled from 'styled-components';
 import Toast from '../helpers/Toast';
 import { ToastContainer, toast } from 'react-toastify';
+import { ScriptElementKindModifier } from 'typescript';
 
 const useStyles = makeStyles((theme) => ({
   root: { flexGrow: 1 },
@@ -36,6 +37,7 @@ function BooksIndex() {
   const classes = useStyles();
   const [data, setData] = useState<PaginatedList<ListBookDTO>>(new PaginatedList<ListBookDTO>(false, "", "", [], 0, true, false));
   const [parameters, setParameters] = useState<Parameter[]>([]);
+  const [orderParameters, setOrderParameters] = useState<Parameter[]>([]);
   const service = new BookService();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -49,11 +51,11 @@ function BooksIndex() {
 
 
   useEffect(() => {
-    fetchData(parameters);
-  }, [isLoading, currentPage, PageSize, parameters]);
+    fetchData();
+  }, [isLoading, currentPage, PageSize, parameters, orderParameters]);
 
-  const fetchData = async (searchParameters: Parameter[]) => {
-    var response = await service.GetAll(currentPage, PageSize, searchParameters)
+  const fetchData = async () => {
+    var response = await service.GetAll(currentPage, PageSize, parameters, orderParameters)
       .then((result) => {
         if (result.success == false) {
           Toast.Show("error", result.message)
@@ -68,7 +70,7 @@ function BooksIndex() {
   const deleteBook = async (id: number) => {
     var response = await service.Delete(id);
     if (response.sucess == true) {
-      fetchData(parameters);
+      fetchData();
       Toast.Show("success", "Livro eliminado com sucesso");
     }
     else {
@@ -86,7 +88,7 @@ function BooksIndex() {
   const buttonhandleClick = async () => {
     var parametersSearch: Parameter[] = [];
     if (name != null) {
-      var parameter: Parameter = new Parameter("name", name.trim());
+      var parameter: Parameter = new Parameter("name", name);
       parametersSearch.push(parameter);
     }
     if (price != null) {
@@ -98,12 +100,40 @@ function BooksIndex() {
       parametersSearch.push(parameter);
     }
     if (author != null) {
-      var parameter: Parameter = new Parameter("author", author.trim());
+      var parameter: Parameter = new Parameter("author", author);
       parametersSearch.push(parameter);
     }
 
     await setParameters(parametersSearch);
   }
+
+  const headerHandleClick = async (value: string) => {
+    var parameterOrder: Parameter[] = orderParameters;
+    var parameter: Parameter = new Parameter(value, "ASC");
+    var found = false;
+    await parameterOrder.map((element) => {
+      if (element.name == value) {
+        found = true;
+        if (element.value == "DESC") {
+          parameterOrder = parameterOrder.filter((e) => e.name !== element.name)
+        }
+        if (element.value == "ASC") {
+          element.value = "DESC"
+        }
+      }
+    });
+
+    if (found == false) {
+      parameterOrder.unshift(parameter);
+    }
+    await setOrderParameters(parameterOrder);
+    fetchData()
+
+  }
+
+
+
+
 
   return (
     <div>
@@ -158,16 +188,16 @@ function BooksIndex() {
                     <TableCell align="right">
                       ID
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" aria-label="name" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }}>
                       Name
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" aria-label="price" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }}>
                       Price
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" aria-label="stockNumber" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }}>
                       Stock
                     </TableCell>
-                    <TableCell align="right">
+                    <TableCell align="right" aria-label="author" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }}>
                       Nome Autor
                     </TableCell>
                     <TableCell align="right">
