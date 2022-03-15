@@ -34,6 +34,12 @@ namespace Library.DAL.Services
                     result.Message = responseValidate.Errors.FirstOrDefault()!.ErrorMessage;
                     return result;
                 }
+                var AlreadyHaveAuthor = _authorRepository.GetByName(createAuthor.Name);
+                if (AlreadyHaveAuthor != null) {
+                    result.Message = "Ja exiiste este autor";
+                    return result;
+                }
+
                 var author = await _authorRepository.Create(createAuthor.ToEntity());
 
                 if (author == null) {
@@ -102,7 +108,7 @@ namespace Library.DAL.Services
                     search.CurrentPage = 1;
                 }
 
-                var responseRepository = await _authorRepository.GetAll(search.Parameters, search.CurrentPage, search.PageSize);
+                var responseRepository = await _authorRepository.GetAll(search.SearchBy, search.OrderBy, search.CurrentPage, search.PageSize);
                 result.Items = responseRepository.Items.Select(t => new ListAuthorDTO(t)).ToList();
                 result.Success = true;
                 result.TotalRecords = responseRepository.TotalRecords;

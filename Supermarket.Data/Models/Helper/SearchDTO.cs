@@ -11,6 +11,8 @@ namespace Supermarket.Data.Models.Helper
         public int CurrentPage { get; set; }
         public int PageSize { get; set; }
 
-        public List<Parameter>? Parameters { get; set; }
+        public List<Parameter>? SearchBy { get; set; }
+
+        public List<Parameter>? OrderBy { get; set; }
     }
 }

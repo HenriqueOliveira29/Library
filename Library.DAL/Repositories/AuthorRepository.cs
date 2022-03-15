@@ -32,28 +32,73 @@ namespace Library.DAL.Repositories
             return true;
         }
 
-        public async Task<PaginateList<Author>> GetAll(List<Parameter> parameters, int currentPage = 1, int pageSize = 5)
+        public async Task<PaginateList<Author>> GetAll(List<Parameter> SearchBy,List<Parameter>? OrderBy, int currentPage = 1, int pageSize = 5)
         {
             PaginateList<Author> response = new PaginateList<Author>();
 
             var query = _context.Author.Include(t=>t.Books).AsQueryable();
 
-            parameters = Parameter.VerParametros(new string[] { "name" }, parameters);
+            SearchBy = Parameter.VerParametros(new string[] { "name" }, SearchBy);
 
-            if (parameters.Count() > 0) {
+            if (SearchBy.Count() > 0) {
 
-                foreach (var parameter in parameters) {
+                foreach (var parameter in SearchBy) {
                     if (parameter.Value != null) {
                         switch (parameter.Name) {
                             case "name":
-                                query = query.Where(t => t.Name.ToUpper().Contains(parameter.Value.ToUpper()));
+                                query = query.Where(t => t.Name.ToUpper().Contains(parameter.Value.Trim().ToUpper()));
                                 break;
                         }
                     }
                 }
             }
 
-
+            if (OrderBy != null && OrderBy.Count > 0)
+            {
+                switch (OrderBy[0].Name)
+                {
+                    case "name":
+                        if (OrderBy[0].Value!.ToUpper() == "ASC")
+                        {
+                            query = query.OrderBy(t => t.Name);
+                        }
+                        else
+                        {
+                            query = query.OrderByDescending(t => t.Name);
+                        }
+                        break;
+                    case "numberBook":
+                        if (OrderBy[0].Value!.ToUpper() == "ASC")
+                        {
+                            query = query.OrderBy(t => t.Books.Count());
+                        }
+                        else
+                        {
+                            query = query.OrderByDescending(t => t.Books.Count());
+                        }
+                        break;
+                    case "birthDate":
+                        if (OrderBy[0].Value!.ToUpper() == "ASC")
+                        {
+                            query = query.OrderBy(t => t.BirthDate);
+                        }
+                        else
+                        {
+                            query = query.OrderByDescending(t => t.BirthDate);
+                        }
+                        break;
+                    case "deadDate":
+                        if (OrderBy[0].Value!.ToUpper() == "ASC")
+                        {
+                            query = query.OrderBy(t => t.DeadDate);
+                        }
+                        else
+                        {
+                            query = query.OrderByDescending(t => t.DeadDate);
+                        }
+                        break;
+                }
+            }
 
             response.TotalRecords = query.Count();
 
@@ -83,6 +128,12 @@ namespace Library.DAL.Repositories
         {
             var query = await _context.Author.Where(t => t.AuthorId == id).FirstOrDefaultAsync();
             return query;
+        }
+
+        public async Task<Author> GetByName(string name)
+        {
+            var result =  await _context.Author.Where(t=>t.Name.ToUpper().Contains(name.Trim().ToUpper())).FirstOrDefaultAsync();
+            return result;
         }
 
         public async Task<Author> Update(Author author)

@@ -30,23 +30,23 @@ namespace Library.DAL.Repositories
             return true;
         }
 
-        public async Task<PaginateList<Book>> GetAll(List<Parameter>? parameters, int currentPage = 1, int pageSize = 5)
+        public async Task<PaginateList<Book>> GetAll(List<Parameter>? SearchBy,List<Parameter>? OrderBy, int currentPage = 1, int pageSize = 5)
         {
             PaginateList<Book> response = new PaginateList<Book>();
            
             var query =  _context.Book.Include(t => t.Author).AsQueryable();
 
-            parameters = Parameter.VerParametros(new string[] {
-                "name", "price", "stockNumber", "author"}, parameters);
+            SearchBy = Parameter.VerParametros(new string[] {
+                "name", "price", "stockNumber", "author"}, SearchBy);
 
-            if (parameters.Count() > 0) {
+            if (SearchBy.Count() > 0) {
 
-                foreach (var parameter in parameters) {
+                foreach (var parameter in SearchBy) {
                     if (parameter.Value != null) {
 
                         switch (parameter.Name) {
                               case "name":
-                                query = query.Where(t => t.Name.ToUpper().Contains(parameter.Value.ToUpper()));
+                                query = query.Where(t => t.Name.ToUpper().Contains(parameter.Value.Trim().ToUpper()));
                                 break;
                               case "price":
                                 query = query.Where(t => t.Price.ToString().Contains(parameter.Value));
@@ -55,7 +55,7 @@ namespace Library.DAL.Repositories
                                 query = query.Where(t => t.StockNumber.ToString().Contains(parameter.Value));
                                 break;
                             case "author":
-                                query = query.Where(t => t.Author.Name.ToUpper().Contains(parameter.Value.ToUpper()));
+                                query = query.Where(t => t.Author.Name.ToUpper().Contains(parameter.Value.Trim().ToUpper()));
                                 break;
             
                                 
@@ -65,6 +65,51 @@ namespace Library.DAL.Repositories
             }
 
             response.TotalRecords = query.Count();
+
+            if (OrderBy != null && OrderBy.Count > 0) {
+                switch (OrderBy[0].Name)
+                {
+                    case "name":
+                        if (OrderBy[0].Value!.ToUpper() == "ASC")
+                        {
+                            query = query.OrderBy(t => t.Name);
+                        }
+                        else {
+                            query = query.OrderByDescending(t => t.Name);
+                        }
+                        break;
+                    case "price":
+                        if (OrderBy[0].Value!.ToUpper() == "ASC") 
+                        {
+                            query = query.OrderBy(t => t.Price);
+                        }
+                        else
+                        {
+                            query = query.OrderByDescending(t => t.Price);
+                        }
+                        break;
+                    case "stockNumber":
+                        if (OrderBy[0].Value!.ToUpper() == "ASC")
+                        {
+                            query = query.OrderBy(t => t.StockNumber);
+                        }
+                        else
+                        {
+                            query = query.OrderByDescending(t => t.StockNumber);
+                        }
+                        break;
+                    case "author":
+                        if (OrderBy[0].Value!.ToUpper() == "ASC")
+                        {
+                            query = query.OrderBy(t => t.Author.Name);
+                        }
+                        else
+                        {
+                            query = query.OrderByDescending(t => t.Author.Name);
+                        }
+                        break;
+                }
+            }
 
             var numberOfItemsToSkip = pageSize * (currentPage - 1);
             query = query.Skip(numberOfItemsToSkip);
@@ -92,6 +137,12 @@ namespace Library.DAL.Repositories
         public async Task<Book> GetById(int id)
         {
             var result = await _context.Book.Where(t => t.Id == id).Include(t=>t.Author).FirstOrDefaultAsync();
+            return result;
+        }
+
+        public async Task<Book> GetByName(string name)
+        {
+            var result = await _context.Book.Where(t => t.Name.ToUpper().Contains(name.Trim().ToUpper())).FirstOrDefaultAsync();
             return result;
         }
 

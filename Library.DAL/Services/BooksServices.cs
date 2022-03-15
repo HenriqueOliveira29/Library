@@ -35,6 +35,13 @@ namespace Library.DAL.Services
                     return result;
                 }
 
+                var AlreadyHaveBook = await _bookRepository.GetByName(createBook.Name);
+
+                if (AlreadyHaveBook != null) {
+                    result.Message = "Ja existe este livro";
+                    return result;
+                }
+
                 var book = await _bookRepository.Create(createBook.ToEntity());
 
                 if (book == null) {
@@ -108,7 +115,7 @@ namespace Library.DAL.Services
                     search.CurrentPage = 1;
                 }
 
-                var responseRepository = await _bookRepository.GetAll(search.Parameters, search.CurrentPage, search.PageSize);
+                var responseRepository = await _bookRepository.GetAll(search.SearchBy,search.OrderBy, search.CurrentPage, search.PageSize);
 
                 if (responseRepository.Success != true) {
                     result.Success = false;

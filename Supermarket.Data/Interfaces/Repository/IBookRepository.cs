@@ -14,12 +14,14 @@ namespace Supermarket.Data.Interfaces.Repository
 
         public Task<Book> Update(Book book);
 
-        public Task<PaginateList<Book>> GetAll(List<Parameter>? parameters,  int currentPage = 1, int pageSize = 5);
+        public Task<PaginateList<Book>> GetAll(List<Parameter>? SearchBy, List<Parameter>? OrderBy,  int currentPage = 1, int pageSize = 5);
 
         public Task<Book> GetById(int id);
 
         public Task<Book> GetByAuthor(int id);
 
         public Task<bool> Delete(Book book);
+
+        public Task<Book> GetByName(string name);
     }
 }
