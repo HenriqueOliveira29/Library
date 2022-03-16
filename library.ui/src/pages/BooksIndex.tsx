@@ -15,14 +15,18 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link } from "react-router-dom";
 import { PaginatedList } from '../helpers/PaginatedList';
-import { TableFooter, TablePagination } from '@material-ui/core';
+import { TablePagination } from '@material-ui/core';
 import { Parameter } from '../helpers/Parameter';
 import styled from 'styled-components';
 import Toast from '../helpers/Toast';
 import { ToastContainer, toast } from 'react-toastify';
-import { ScriptElementKindModifier } from 'typescript';
 
 const useStyles = makeStyles((theme) => ({
   root: { flexGrow: 1 },
@@ -42,12 +46,15 @@ function BooksIndex() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [PageSize, setPageSize] = useState<number>(5);
+  const [deleteid, setDeleteID] = useState<number>(0);
 
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [stockNumber, setStockNumber] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
-  const [allSearch, setAllSearch] = useState<string>("")
+  const [allSearch, setAllSearch] = useState<string>("");
+
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
 
 
@@ -70,8 +77,8 @@ function BooksIndex() {
     setIsLoading(false);
   };
 
-  const deleteBook = async (id: number) => {
-    var response = await service.Delete(id);
+  const deleteBook = async () => {
+    var response = await service.Delete(deleteid);
     if (response.sucess == true) {
       fetchData();
       Toast.Show("success", "Livro eliminado com sucesso");
@@ -146,13 +153,42 @@ function BooksIndex() {
     setParameters([]);
   }
 
-
-
-
+  const handleClose = () => {
+    setIsOpen(false);
+    setDeleteID(0);
+  }
+  const handleAccept = () => {
+    setIsOpen(false);
+    deleteBook();
+  }
+  const handleOpen = (id: number) => {
+    setIsOpen(true);
+    setDeleteID(id);
+  }
 
   return (
     <div>
       <Appbar></Appbar>
+      <Dialog
+        open={isOpen}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Delete Book"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Tem a certeza que deseja eliminar este livro
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Nao</Button>
+          <Button onClick={handleAccept} autoFocus>
+            Sim
+          </Button>
+        </DialogActions>
+      </Dialog>
       <ToastContainer />
       <div className={classes.root}>
         <Container className={classes.container} maxWidth='lg'>
@@ -253,7 +289,7 @@ function BooksIndex() {
                             <Button onClick={() => { updateBook(book.id) }} style={{ color: "#fb8500" }}>
                               Edit
                             </Button>
-                            <Button onClick={() => { deleteBook(book.id) }} style={{ color: "#fb8500" }}>
+                            <Button onClick={() => { handleOpen(book.id) }} style={{ color: "#fb8500" }}>
                               Delete
                             </Button>
                           </ButtonGroup>

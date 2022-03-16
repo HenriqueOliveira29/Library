@@ -14,6 +14,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import { Link } from "react-router-dom";
 import { ListAuthorDTO } from '../models/authors/ListAuthorDTO';
 import { PaginatedList } from '../helpers/PaginatedList';
@@ -41,9 +46,12 @@ function AuthorIndex() {
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [PageSize, setPageSize] = useState<number>(5);
+    const [deleteid, setDeleteID] = useState<number>(0);
 
     const [name, setName] = useState<string>("");
     const [allSearch, setAllSearch] = useState<string>("");
+
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
     useEffect(() => {
         fetchData();
@@ -58,9 +66,9 @@ function AuthorIndex() {
         setIsLoading(false);
     };
 
-    const deleteAuthor = async (id: number) => {
+    const deleteAuthor = async () => {
 
-        var response = await service.Delete(id);
+        var response = await service.Delete(deleteid);
         if (response.sucess == true) {
             Toast.Show("success", response.message);
             fetchData();
@@ -121,9 +129,43 @@ function AuthorIndex() {
         setParameters([]);
     }
 
+    const handleClose = () => {
+        setIsOpen(false);
+        setDeleteID(0);
+    }
+    const handleAccept = () => {
+        setIsOpen(false);
+        deleteAuthor();
+    }
+    const handleOpen = (id: number) => {
+        setIsOpen(true);
+        setDeleteID(id);
+    }
+
+
     return (
         <div>
             <Appbar></Appbar>
+            <Dialog
+                open={isOpen}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Delete Author"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Tem a certeza que deseja eliminar este autor
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>Nao</Button>
+                    <Button onClick={handleAccept} autoFocus>
+                        Sim
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <ToastContainer />
             <div className={classes.root}>
                 <Container className={classes.container} maxWidth='lg'>
@@ -209,7 +251,7 @@ function AuthorIndex() {
                                                             Edit
                                                         </Button>
                                                         {(author.bookNumber < 1) ?
-                                                            <Button onClick={() => { deleteAuthor(author.authorId) }} style={{ color: "#fb8500" }}>
+                                                            <Button onClick={() => { handleOpen(author.authorId) }} style={{ color: "#fb8500" }}>
                                                                 Delete
                                                             </Button> :
                                                             ""

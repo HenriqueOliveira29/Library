@@ -35,8 +35,8 @@ namespace Library.DAL.Services
                     return result;
                 }
                 var AlreadyHaveAuthor = _authorRepository.GetByName(createAuthor.Name);
-                if (AlreadyHaveAuthor != null) {
-                    result.Message = "Ja exiiste este autor";
+                if (AlreadyHaveAuthor.Result != null) {
+                    result.Message = "Ja existe este autor";
                     return result;
                 }
 
