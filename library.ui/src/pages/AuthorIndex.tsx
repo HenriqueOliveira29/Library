@@ -27,6 +27,8 @@ import { Parameter } from '../helpers/Parameter';
 import styled from 'styled-components';
 import Toast from '../helpers/Toast';
 import { ToastContainer } from 'react-toastify';
+import ModalComponent from '../Components/ModalComponent';
+import TableComponent from '../Components/TableComponent';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AuthorIndex() {
+    const columns = ["id", "name", "birthdate", "deaddate", "numberBook"]
     const classes = useStyles();
     const [data, setData] = useState<PaginatedList<ListAuthorDTO>>(new PaginatedList<ListAuthorDTO>(false, "", "", [], 0, true, false));
     const [parameters, setParameters] = useState<Parameter[]>([]);
@@ -146,26 +149,7 @@ function AuthorIndex() {
     return (
         <div>
             <Appbar></Appbar>
-            <Dialog
-                open={isOpen}
-                aria-labelledby="alert-dialog-title"
-                aria-describedby="alert-dialog-description"
-            >
-                <DialogTitle id="alert-dialog-title">
-                    {"Delete Author"}
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Tem a certeza que deseja eliminar este autor
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Nao</Button>
-                    <Button onClick={handleAccept} autoFocus>
-                        Sim
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ModalComponent IsOpen={isOpen} text="Tem a certeza que quer eliminar este autor" title='Eliminar autor' OnClickYes={handleAccept} OnClickNo={handleClose}></ModalComponent>
             <ToastContainer />
             <div className={classes.root}>
                 <Container className={classes.container} maxWidth='lg'>
@@ -204,66 +188,7 @@ function AuthorIndex() {
                             </Box>
                         </Box>
                         <TableContainer component={Paper}>
-                            <Table aria-label="Books List">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell align="right">
-                                            ID
-                                        </TableCell>
-                                        <TableCell align="right" aria-label="name" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
-                                            Name
-                                        </TableCell>
-                                        <TableCell align="right" aria-label="birthDate" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
-                                            BirthDate
-                                        </TableCell>
-                                        <TableCell align="right" aria-label="deadDate" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
-                                            DeadDate
-                                        </TableCell>
-                                        <TableCell align="right" aria-label="numberBook" onClick={(e) => { headerHandleClick(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
-                                            Numero de livros
-                                        </TableCell>
-
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {
-                                        data.items.map((author) => (
-                                            <TableRow key={author.authorId}>
-                                                <TableCell align="right">
-                                                    {author.authorId}
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    {author.name}
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    {author.birthDate}
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    {author.deadDate}
-                                                </TableCell>
-                                                <TableCell align="right">
-                                                    {author.bookNumber}
-                                                </TableCell>
-
-                                                <TableCell align="center">
-                                                    <ButtonGroup aria-label="buttons" style={{ color: "#fb8500" }}>
-                                                        <Button onClick={() => { updateAuthor(author.authorId) }} style={{ color: "#fb8500" }}>
-                                                            Edit
-                                                        </Button>
-                                                        {(author.bookNumber < 1) ?
-                                                            <Button onClick={() => { handleOpen(author.authorId) }} style={{ color: "#fb8500" }}>
-                                                                Delete
-                                                            </Button> :
-                                                            ""
-                                                        }
-
-                                                    </ButtonGroup>
-                                                </TableCell>
-                                            </TableRow>
-                                        ))
-                                    }
-                                </TableBody>
-                            </Table>
+                            <TableComponent columns={columns} data={data.items} OnDelete={handleOpen} OnEdit={updateAuthor} OnClickHeader={headerHandleClick}></TableComponent>
                         </TableContainer>
                         <TablePagination
                             rowsPerPageOptions={[5, 10, 25]}

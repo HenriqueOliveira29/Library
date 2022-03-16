@@ -21,7 +21,7 @@ namespace Supermarket.Data.Models.Helper
         public static List<Parameter> VerParametros(string[] necessaryParameters, List<Parameter> searchParameters) {
             List<Parameter> list = new List<Parameter>();
 
-            if (necessaryParameters == null) return list;
+            if (searchParameters == null) return list;
 
             foreach (var parameter in necessaryParameters) {
                 Parameter? parameterExist = null;
