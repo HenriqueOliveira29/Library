@@ -43,6 +43,7 @@ function AuthorIndex() {
     const [PageSize, setPageSize] = useState<number>(5);
 
     const [name, setName] = useState<string>("");
+    const [allSearch, setAllSearch] = useState<string>("");
 
     useEffect(() => {
         fetchData();
@@ -80,7 +81,11 @@ function AuthorIndex() {
     const buttonhandleClick = async () => {
         var parametersSearch: Parameter[] = [];
         if (name != null) {
-            var parameter: Parameter = new Parameter("name", name.trim());
+            var parameter: Parameter = new Parameter("name", name);
+            parametersSearch.push(parameter);
+        }
+        if (allSearch != null) {
+            var parameter: Parameter = new Parameter("all", Search);
             parametersSearch.push(parameter);
         }
 
@@ -110,6 +115,12 @@ function AuthorIndex() {
         fetchData()
     }
 
+    const HandleClearSearch = () => {
+        setName("");
+        setAllSearch("");
+        setParameters([]);
+    }
+
     return (
         <div>
             <Appbar></Appbar>
@@ -119,13 +130,17 @@ function AuthorIndex() {
                     <Search>
                         <ItemSearch>
                             <Text>Search by name</Text>
-                            <Input type="text" name="name" onChange={(e) => { setName(e.target.value) }}></Input>
+                            <Input type="text" name="name" onChange={(e) => { setName(e.target.value) }} value={name}></Input>
+                        </ItemSearch>
+                        <ItemSearch>
+                            <Text>Search by all fields</Text>
+                            <Input type="text" name="searchAll" onChange={(e) => { setAllSearch(e.target.value) }} value={allSearch}></Input>
                         </ItemSearch>
                         <ButtonContainer>
                             <ButtonSearch onClick={() => { buttonhandleClick() }}>
                                 Search
                             </ButtonSearch>
-                            <ButtonSearch onClick={() => { setParameters([]) }}>
+                            <ButtonSearch onClick={() => { HandleClearSearch() }}>
                                 Clear Search
                             </ButtonSearch>
                         </ButtonContainer>

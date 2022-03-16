@@ -37,7 +37,7 @@ namespace Library.DAL.Repositories
             var query =  _context.Book.Include(t => t.Author).AsQueryable();
 
             SearchBy = Parameter.VerParametros(new string[] {
-                "name", "price", "stockNumber", "author"}, SearchBy);
+                "name", "price", "stockNumber", "author", "all"}, SearchBy);
 
             if (SearchBy.Count() > 0) {
 
@@ -57,8 +57,11 @@ namespace Library.DAL.Repositories
                             case "author":
                                 query = query.Where(t => t.Author.Name.ToUpper().Contains(parameter.Value.Trim().ToUpper()));
                                 break;
-            
-                                
+                            case "all":
+                                query = query.Where(t => t.Name.ToUpper().Contains(parameter.Value.Trim().ToUpper()) || t.Price.ToString().Contains(parameter.Value) || t.StockNumber.ToString().Contains(parameter.Value) || t.Author.Name.ToUpper().Contains(parameter.Value.Trim().ToUpper()) || t.Id.ToString().Contains(parameter.Value.Trim().ToUpper()));
+                                break;
+
+
                         }
                     }
                 }
@@ -108,6 +111,8 @@ namespace Library.DAL.Repositories
                             query = query.OrderByDescending(t => t.Author.Name);
                         }
                         break;
+                    
+                        
                 }
             }
 

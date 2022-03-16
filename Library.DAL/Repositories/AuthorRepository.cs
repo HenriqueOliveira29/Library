@@ -38,7 +38,7 @@ namespace Library.DAL.Repositories
 
             var query = _context.Author.Include(t=>t.Books).AsQueryable();
 
-            SearchBy = Parameter.VerParametros(new string[] { "name" }, SearchBy);
+            SearchBy = Parameter.VerParametros(new string[] { "name", "all" }, SearchBy);
 
             if (SearchBy.Count() > 0) {
 
@@ -47,6 +47,13 @@ namespace Library.DAL.Repositories
                         switch (parameter.Name) {
                             case "name":
                                 query = query.Where(t => t.Name.ToUpper().Contains(parameter.Value.Trim().ToUpper()));
+                                break;
+                            case "all":
+                                query = query.Where(t => t.Name.ToUpper().Contains(parameter.Value.Trim().ToUpper()) || 
+                                t.BirthDate.ToString().Contains(parameter.Value) || 
+                                t.DeadDate.ToString().Contains(parameter.Value) || 
+                                t.Books.Count().ToString().ToUpper().Contains(parameter.Value.Trim().ToUpper()) || 
+                                t.AuthorId.ToString().Contains(parameter.Value.Trim().ToUpper()));
                                 break;
                         }
                     }

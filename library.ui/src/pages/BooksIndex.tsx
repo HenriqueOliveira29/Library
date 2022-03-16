@@ -43,16 +43,18 @@ function BooksIndex() {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [PageSize, setPageSize] = useState<number>(5);
 
-  const [name, setName] = useState<String>("");
+  const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<string>("");
   const [stockNumber, setStockNumber] = useState<string>("");
-  const [author, setAuthor] = useState<String>("");
+  const [author, setAuthor] = useState<string>("");
+  const [allSearch, setAllSearch] = useState<string>("")
 
 
 
   useEffect(() => {
     fetchData();
   }, [isLoading, currentPage, PageSize, parameters, orderParameters]);
+
 
   const fetchData = async () => {
     var response = await service.GetAll(currentPage, PageSize, parameters, orderParameters)
@@ -67,6 +69,7 @@ function BooksIndex() {
       })
     setIsLoading(false);
   };
+
   const deleteBook = async (id: number) => {
     var response = await service.Delete(id);
     if (response.sucess == true) {
@@ -103,6 +106,10 @@ function BooksIndex() {
       var parameter: Parameter = new Parameter("author", author);
       parametersSearch.push(parameter);
     }
+    if (allSearch != null) {
+      var parameter: Parameter = new Parameter("all", allSearch);
+      parametersSearch.push(parameter);
+    }
 
     await setParameters(parametersSearch);
   }
@@ -122,12 +129,21 @@ function BooksIndex() {
         }
       }
     });
-
     if (found == false) {
       parameterOrder.unshift(parameter);
     }
+
     await setOrderParameters(parameterOrder);
     fetchData()
+  }
+
+  const handleClearSearch = () => {
+    setName("");
+    setAuthor("");
+    setAllSearch("");
+    setPrice("");
+    setStockNumber("");
+    setParameters([]);
   }
 
 
@@ -142,25 +158,29 @@ function BooksIndex() {
         <Container className={classes.container} maxWidth='lg'>
           <Search>
             <ItemSearch>
-              <Text>Pesquisa por nome</Text>
-              <Input type="text" name="name" onChange={(e) => { setName(e.target.value) }}></Input>
+              <Text>Search by name</Text>
+              <Input type="text" name="name" onChange={(e) => { setName(e.target.value) }} value={name}></Input>
             </ItemSearch>
             <ItemSearch>
-              <Text>Pesquisa por preco</Text>
-              <Input type="number" name="price" onChange={(e) => { setPrice(e.target.value) }}></Input>
+              <Text>Search by price</Text>
+              <Input type="number" name="price" onChange={(e) => { setPrice(e.target.value) }} value={price}></Input>
             </ItemSearch>
             <ItemSearch>
-              <Text>Pesquisa por stock</Text>
-              <Input type="number" name="stockNumber" onChange={(e) => { setStockNumber(e.target.value) }}></Input>
+              <Text>Search by stock</Text>
+              <Input type="number" name="stockNumber" onChange={(e) => { setStockNumber(e.target.value) }} value={stockNumber}></Input>
             </ItemSearch>
             <ItemSearch>
-              <Text>Pesquisa por autor</Text>
-              <Input type="text" name="author" onChange={(e) => { setAuthor(e.target.value) }} ></Input>
+              <Text>Search by author</Text>
+              <Input type="text" name="author" onChange={(e) => { setAuthor(e.target.value) }} value={author} ></Input>
+            </ItemSearch>
+            <ItemSearch>
+              <Text>Search by all fields</Text>
+              <Input type="text" name="all" onChange={(e) => { setAllSearch(e.target.value) }} value={allSearch} ></Input>
             </ItemSearch>
             <ButtonSearch onClick={() => { buttonhandleClick() }}>
               Search
             </ButtonSearch>
-            <ButtonSearch onClick={() => { setParameters([]) }}>
+            <ButtonSearch onClick={() => { handleClearSearch() }}>
               Clear Search
             </ButtonSearch>
           </Search>
@@ -286,7 +306,7 @@ const ItemSearch = styled.div`
 `
 
 const Input = styled.input`
-  width: 100%;
+  width: 80%;
   border-radius: 10px;
   border: solid 1px gray;
   padding: 5px;
