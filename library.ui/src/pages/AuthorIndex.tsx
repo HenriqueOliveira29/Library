@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function AuthorIndex() {
-    const columns = ["id", "name", "birthdate", "deaddate", "numberBook"]
+    const columns = ["authorId", "name", "birthDate", "deadDate", "bookNumber"]
     const classes = useStyles();
     const [data, setData] = useState<PaginatedList<ListAuthorDTO>>(new PaginatedList<ListAuthorDTO>(false, "", "", [], 0, true, false));
     const [parameters, setParameters] = useState<Parameter[]>([]);

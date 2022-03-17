@@ -17,6 +17,7 @@ export type TableComponentProps = {
 }
 export default function TableComponent(props: TableComponentProps) {
     var numberColumn: number = 0;
+    console.log(props.data)
     return (
         <>
             <Table aria-label="Books List">
@@ -38,18 +39,20 @@ export default function TableComponent(props: TableComponentProps) {
                             <TableRow key={item[0]}>
                                 {
                                     props.columns.map((colum) => {
+                                        return (
+                                            <TableCell align="right">
+                                                {item[colum]}
+                                            </TableCell>
+                                        );
 
-                                        <TableCell align="right">
-                                            {item.colum}
-                                        </TableCell>
                                     })
                                 }
                                 <TableCell align="center">
                                     <ButtonGroup aria-label="buttons" style={{ color: "#fb8500" }}>
-                                        <Button onClick={() => { props.OnEdit(item[0]) }} style={{ color: "#fb8500" }}>
+                                        <Button onClick={() => { props.OnEdit(item.id) }} style={{ color: "#fb8500" }}>
                                             Edit
                                         </Button>
-                                        <Button onClick={() => { props.OnDelete(item[0]) }} style={{ color: "#fb8500" }}>
+                                        <Button onClick={() => { props.OnDelete(item.id) }} style={{ color: "#fb8500" }}>
                                             Delete
                                         </Button>
                                     </ButtonGroup>
