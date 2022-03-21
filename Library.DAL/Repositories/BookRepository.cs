@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Supermarket.Data;
 using Supermarket.Data.Entities;
 using Supermarket.Data.Interfaces.Repository;
+using Supermarket.Data.Models.AuditTable;
 using Supermarket.Data.Models.Helper;
 
 namespace Library.DAL.Repositories
@@ -23,18 +24,22 @@ namespace Library.DAL.Repositories
 
         public async Task<bool> Delete(Book book)
         {
-            
-             _context.Book.Remove(book);
-            await _context.SaveChangesAsync();
-          
-            return true;
+            if (typeof(Auditable).IsAssignableFrom(typeof(Book)))
+            {
+                (book as Auditable).DateDeleted = DateTimeOffset.UtcNow;
+                _context.Entry<Book>(book).CurrentValues.SetValues(book);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
         }
 
         public async Task<PaginateList<Book>> GetAll(List<Parameter>? SearchBy,List<Parameter>? OrderBy, int currentPage = 1, int pageSize = 5)
         {
             PaginateList<Book> response = new PaginateList<Book>();
            
-            var query =  _context.Book.Include(t => t.Author).AsQueryable();
+            var query =  _context.Book.Include(t => t.Author).Where(a=> a.DateDeleted == null).AsQueryable();
 
             SearchBy = Parameter.VerParametros(new string[] {
                 "name", "price", "stockNumber", "author", "all"}, SearchBy);
@@ -135,19 +140,19 @@ namespace Library.DAL.Repositories
 
         public async Task<Book> GetByAuthor(int id)
         {
-            var result = await _context.Book.Where(t => t.AuthorId == id).FirstOrDefaultAsync();
+            var result = await _context.Book.Where(t => t.AuthorId == id).Where(a=> a.DateDeleted == null).FirstOrDefaultAsync();
             return result;
         }
 
         public async Task<Book> GetById(int id)
         {
-            var result = await _context.Book.Where(t => t.Id == id).Include(t=>t.Author).FirstOrDefaultAsync();
+            var result = await _context.Book.Where(t => t.Id == id).Include(t=>t.Author).Where(a => a.DateDeleted == null).FirstOrDefaultAsync();
             return result;
         }
 
         public async Task<Book> GetByName(string name)
         {
-            var result = await _context.Book.Where(t => t.Name.ToUpper().Contains(name.Trim().ToUpper())).FirstOrDefaultAsync();
+            var result = await _context.Book.Where(t => t.Name.ToUpper().Contains(name.Trim().ToUpper())).Where(a => a.DateDeleted == null).FirstOrDefaultAsync();
             return result;
         }
 

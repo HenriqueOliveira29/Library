@@ -16,8 +16,6 @@ export type TableComponentProps = {
     OnClickHeader: (name: string) => void;
 }
 export default function TableComponent(props: TableComponentProps) {
-    var numberColumn: number = 0;
-    console.log(props.data)
     return (
         <>
             <Table aria-label="Books List">

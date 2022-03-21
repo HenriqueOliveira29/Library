@@ -1,12 +1,14 @@
-﻿using System;
+﻿using Supermarket.Data.Models.AuditTable;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Supermarket.Data.Entities
 {
-    public class Book
+    public class Book : Auditable
     {
        public int Id { get; set; }
 

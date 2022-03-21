@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Supermarket.Data.Models.AuditTable;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Supermarket.Data.Entities
 {
-    public class Author
+    public class Author : Auditable
     {
         public int AuthorId { get; set; }
 
