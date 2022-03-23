@@ -46,12 +46,12 @@ namespace Library.DAL.Services
 
                 var userRoles = (await _userManager.GetRolesAsync(user)).ToList();
 
-                if (userRoles == null || userRoles.Count() == 0)
-                {
-                    response.Sucess = false;
-                    response.Message = "Utilizador com configuracao invalida";
-                    return response;
-                }
+                //if (userRoles == null || userRoles.Count() == 0)
+                //{
+                    //response.Sucess = false;
+                    //response.Message = "Utilizador com configuracao invalida";
+                    //return response;
+                //}
 
                 if (user != null)
                 {

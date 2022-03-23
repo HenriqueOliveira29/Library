@@ -87,5 +87,26 @@ namespace Supermarket.API.Controllers
             return Ok(result);
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("[action]")]
+        public IActionResult Logout() {
+            MessageHelper<object> response = new MessageHelper<object>();
+
+            try
+            {
+                HttpContext.Session.Clear();
+                response.Sucess = true;
+                response.Message = "";
+
+            }
+            catch (Exception ex) {
+                response.Sucess= false;
+                response.obj = null;
+                response.Message = ex.Message;
+            }
+            return Ok(response);
+        }
+
     }
 }

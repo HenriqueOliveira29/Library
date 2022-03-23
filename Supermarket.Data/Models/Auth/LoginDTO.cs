@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Supermarket.Data.Models.Auth
 {
-    public interface LoginDTO
+    public class LoginDTO
     {
         public string? Email { get; set; }
         public string? Password { get; set; }

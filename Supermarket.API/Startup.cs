@@ -78,7 +78,6 @@ namespace Supermarket.API
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequiredLength = 8;
-                options.Password.RequiredUniqueChars = 1;
             });
 
             services.AddAuthentication(options =>
@@ -155,9 +154,12 @@ namespace Supermarket.API
 
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IAuthorRepository, AuthorRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddTransient<IBookService, BooksServices>();
             services.AddTransient<IAuthorService, AuthorService>();
+            services.AddTransient<IAuthService, AuthService>();
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider, ApplicationDBContext applicationDbContext)
