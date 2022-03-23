@@ -6,6 +6,8 @@ import BookEdit from "./BookEdit";
 import AuthorIndex from "./AuthorIndex";
 import AuthorCreate from "./AuthorCreate";
 import AuthorEdit from "./AuthorEdit";
+import Login from "./Login";
+import CreateAccount from "./CreateAccount";
 
 function Index() {
     return (
@@ -17,6 +19,8 @@ function Index() {
                 <Route exact path="/author" element={<AuthorIndex />}></Route>
                 <Route exact path="/createAuthor" element={<AuthorCreate />}></Route>
                 <Route exact path="/updateAuthor/:id" element={<AuthorEdit />}></Route>
+                <Route exact path="/login" element={<Login />}></Route>
+                <Route exact path="/createAccount" element={<CreateAccount />}></Route>
             </Routes>
         </BrowserRouter>
     );

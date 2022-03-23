@@ -1,8 +1,24 @@
+import { LocalDiningOutlined } from "@material-ui/icons";
 import React from "react";
 import { Link } from "react-router-dom";
+
 import styled from "styled-components";
+import Toast from "../helpers/Toast";
+import { AuthService } from "../services/AuthService";
 
 const Appbar = () => {
+    const service: AuthService = new AuthService();
+    const logout = async () => {
+        const service = new AuthService();
+
+        var response = await service.Logout();
+        if (response.sucess !== true) {
+            Toast.Show("error", "Não foi possível fechar a sessão corretamente!");
+            return;
+        }
+
+        window.location.href = "/login";
+    }
     return (
         <Container>
             <Navbar>
@@ -19,6 +35,10 @@ const Appbar = () => {
                     <Link to="/author" style={{ textDecoration: "none" }}>
                         <Route>Autor</Route>
                     </Link>
+                    <Button onClick={logout}>
+                        <Route>Logout</Route>
+                    </Button>
+
                 </Routes>
             </Navbar>
         </Container>
@@ -54,6 +74,9 @@ const LogoName = styled.div`
 `;
 const Routes = styled.div`
     display: flex;
+`;
+const Button = styled.button`
+
 `;
 const Route = styled.div`
     margin: 20px;
