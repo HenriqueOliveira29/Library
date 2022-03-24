@@ -108,5 +108,32 @@ namespace Supermarket.API.Controllers
             return Ok(response);
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("[action]")]
+        public IActionResult GetUser() {
+            MessageHelper<AuthDTO> response = new MessageHelper<AuthDTO>();
+
+            try
+            {
+                 response.Sucess = true;
+                response.Message = "";
+                response.obj = new AuthDTO()
+                {
+                    Token = HttpContext.Session.GetString("token") ?? null,
+                    UserName = HttpContext.Session.GetString("username") ?? null,
+                    Id = HttpContext.Session.GetString("id") ?? null,
+                    Roles = HttpContext.Session.GetString("roles")?.Split(",") ?? null,
+                };
+            }
+            catch (Exception ex) { 
+                response.Sucess= false;
+                response.Message= ex.Message;
+                response.obj = null;
+            }
+
+            return Ok(response);
+        }
+
     }
 }

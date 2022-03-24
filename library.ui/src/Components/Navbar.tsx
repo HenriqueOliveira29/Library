@@ -1,10 +1,12 @@
 import { LocalDiningOutlined } from "@material-ui/icons";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import styled from "styled-components";
+import { AuthProvider } from "../Context/AuthContext";
 import Toast from "../helpers/Toast";
 import { AuthService } from "../services/AuthService";
+
 
 const Appbar = () => {
     const service: AuthService = new AuthService();
@@ -76,7 +78,8 @@ const Routes = styled.div`
     display: flex;
 `;
 const Button = styled.button`
-
+    background-color: transparent;
+    border: none;
 `;
 const Route = styled.div`
     margin: 20px;

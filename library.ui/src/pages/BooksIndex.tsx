@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { BookService } from '../services/BookService'
 import { ListBookDTO } from "../models/books/ListBookDTO";
 import Appbar from '../Components/Navbar';
@@ -18,6 +18,8 @@ import Toast from '../helpers/Toast';
 import { ToastContainer, toast } from 'react-toastify';
 import ModalComponent from '../Components/ModalComponent';
 import TableComponent from '../Components/TableComponent';
+import { useAuth } from '../Context/AuthContext';
+
 
 const useStyles = makeStyles((theme) => ({
   root: { flexGrow: 1 },
@@ -38,6 +40,8 @@ function BooksIndex() {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [PageSize, setPageSize] = useState<number>(5);
   const [deleteid, setDeleteID] = useState<number>(0);
+  const { currentUser } = useAuth();
+
 
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<string>("");
@@ -51,6 +55,7 @@ function BooksIndex() {
 
   useEffect(() => {
     fetchData();
+    console.log(currentUser);
   }, [isLoading, currentPage, PageSize, parameters, orderParameters]);
 
 

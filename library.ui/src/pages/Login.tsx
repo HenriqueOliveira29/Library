@@ -6,9 +6,11 @@ import '@fontsource/roboto/400.css';
 import { AuthService } from '../services/AuthService';
 import { LoginDTO } from '../models/authModels/LoginDTO';
 import Toast from '../helpers/Toast';
+import { useAuth } from '../Context/AuthContext';
 
 function Login() {
     const service: AuthService = new AuthService();
+    const { setCurrentUser } = useAuth();
     const [loading, setLoading] = useState<boolean>(false);
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -23,15 +25,18 @@ function Login() {
         var response = await service.Login(login);
 
         if (response.sucess == true && response.obj != null) {
+            setCurrentUser(response.obj);
+
             Toast.Show("success", "Login efetuado com sucesso!");
             setLoading(false);
-            window.location.href = "/";
 
+            window.location.href = "/";
         }
         else {
             console.log(response.message);
             setLoading(false);
         }
+        console.log()
     }
 
     return (
