@@ -44,8 +44,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
         }
 
         setCurrentUser(user);
-        console.log(user);
-        console.log(currentUser);
+
 
         setIsUserLoggedIn(true);
 
@@ -83,8 +82,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     }
 
     useEffect(() => {
-        console.log("alterou")
-        console.log(currentUser)
+        console.log("alterou", currentUser?.token)
         APIService.SetToken(currentUser?.token ?? null);
     }, [currentUser])
 

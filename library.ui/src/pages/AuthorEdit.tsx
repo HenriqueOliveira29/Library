@@ -12,7 +12,7 @@ import { ToastContainer } from 'react-toastify';
 
 
 function AuthorEdit() {
-    const { id } = useParams();
+    const id: number = useParams();
     const service = new AuthorService();
     const [author, setAuthor] = useState<AuthorDTO>(new AuthorDTO());
     const [loading, setLoading] = useState<boolean>(true);
@@ -23,7 +23,7 @@ function AuthorEdit() {
     }, [loading]);
 
     const fetchData = () => {
-        var response = service.GetById(Number.parseInt(id!)).then((result) => {
+        var response = service.GetById(id).then((result) => {
             if (result.sucess == true && result.obj != null) {
                 setAuthor(result.obj);
                 setLoading(false);

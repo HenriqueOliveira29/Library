@@ -116,7 +116,7 @@ namespace Supermarket.API.Controllers
 
             try
             {
-                 response.Sucess = true;
+                response.Sucess = true;
                 response.Message = "";
                 response.obj = new AuthDTO()
                 {

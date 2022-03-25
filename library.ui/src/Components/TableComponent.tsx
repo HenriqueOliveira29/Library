@@ -21,9 +21,9 @@ export default function TableComponent(props: TableComponentProps) {
             <Table aria-label="Books List">
                 <TableHead>
                     <TableRow>
-                        {props.columns.map((column) => {
+                        {props.columns.map((column, index) => {
                             return (
-                                <TableCell align="right" aria-label={column} onClick={(e) => { props.OnClickHeader(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
+                                <TableCell key={index} align="right" aria-label={column} onClick={(e) => { props.OnClickHeader(e.currentTarget.ariaLabel!.valueOf()) }} style={{ cursor: 'pointer' }}>
                                     {column}
                                 </TableCell>
                             )
@@ -36,7 +36,7 @@ export default function TableComponent(props: TableComponentProps) {
                         props.data.map((item) => (
                             <TableRow key={item[0]}>
                                 {
-                                    props.columns.map((colum) => {
+                                    props.columns.map((colum, index) => {
                                         return (
                                             <TableCell align="right">
                                                 {item[colum]}

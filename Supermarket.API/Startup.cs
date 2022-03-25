@@ -116,7 +116,10 @@ namespace Supermarket.API
                             context.Fail("invalid Data");
                             return Task.CompletedTask;
                         }
-                        var user = _userManager.Users.Include(u => u.UserRoles).ThenInclude(t => t.Role).Single(o => o.Id == userID);
+                        var user = _userManager.Users
+                        .Include(u => u.UserRoles).
+                        ThenInclude(t => t.Role).
+                        Single(o => o.Id == userID);
 
                         if (user is null) {
                             context.Response.StatusCode = 401;
@@ -180,6 +183,8 @@ namespace Supermarket.API
 
             app.UseHttpsRedirection();
 
+            app.UseStaticFiles();
+            app.UseDefaultFiles();
             app.UseAuthorization();
             app.UseAuthentication();
 

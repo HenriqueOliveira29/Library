@@ -32,7 +32,6 @@ export class AuthService{
             var response = await APIService.Axios().get(`${APIService.GetURL()}/auth/getUser`,{
                 withCredentials: true
             });
-            console.log(response.data);
             return response.data;
 
         }catch(error){

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import NavbarBase from '../Components/NavbarBase'
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import '@fontsource/roboto/400.css';
 import { AuthService } from '../services/AuthService';
 import { LoginDTO } from '../models/authModels/LoginDTO';
@@ -14,6 +14,7 @@ function Login() {
     const [loading, setLoading] = useState<boolean>(false);
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const history = useHistory();
 
     const login = async () => {
         setLoading(true);
@@ -22,7 +23,6 @@ function Login() {
             password: password
         }
 
-        console.log(login)
         var response = await service.Login(login);
 
         if (response.sucess == true && response.obj != null) {
@@ -30,15 +30,13 @@ function Login() {
 
             Toast.Show("success", "Login efetuado com sucesso!");
             setLoading(false);
-            console.log(response.obj)
 
-            //window.location.href = "/";
+            history.push("/");
+
         }
         else {
-            console.log(response.message);
             setLoading(false);
         }
-        console.log()
     }
 
     return (

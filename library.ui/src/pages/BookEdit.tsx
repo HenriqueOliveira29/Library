@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { ListBookDTO } from '../models/books/ListBookDTO'
 import { ListAuthorDTO } from '../models/authors/ListAuthorDTO';
 import { BookDTO } from "../models/books/BookDTO";
@@ -13,12 +13,13 @@ import Toast from '../helpers/Toast';
 
 function BookEdit() {
     const authorService = new AuthorService();
-    const { id } = useParams();
+    const id: number = useParams();
     const [book, setBook] = useState<BookDTO>(new BookDTO());
     const service = new BookService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [authors, setAuthors] = useState<ListAuthorDTO[]>([])
     const [LoadingAuthors, setLoadingAuthors] = useState<boolean>(true);
+    const history = useHistory();
 
     useEffect(() => {
         getBook();
@@ -41,7 +42,7 @@ function BookEdit() {
         if (id == null) {
             return "Erro;"
         }
-        const response = await service.getById(Number.parseInt(id)).then((result) => {
+        const response = await service.getById(id).then((result) => {
             if (result.obj != null) {
                 setBook(result.obj);
 
@@ -65,7 +66,7 @@ function BookEdit() {
         const response = await service.update(Bookdata).then((result) => {
             if (result.sucess == true) {
                 Toast.Show("success", "Criado com sucesso")
-                window.location.href = "/";
+                history.goBack();
             }
             Toast.Show("error", result.message)
 

@@ -7,7 +7,7 @@ import { BookService } from '../services/BookService';
 
 
 function BookDetail() {
-    const {id} = useParams();
+    const id: number = useParams();
     const [book, setBook] = useState<BookDTO>(new BookDTO());
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const service = new BookService();
@@ -22,7 +22,7 @@ function BookDetail() {
         if (id == null) {
             return "Erro;"
         }
-        const response = await service.getById(Number.parseInt(id)).then((result) => {
+        const response = await service.getById(id).then((result) => {
             if (result.obj != null) {
                 setBook(result.obj);
 
@@ -34,22 +34,22 @@ function BookDetail() {
         setIsLoading(false);
     }
 
-  return (
-    <>
-        <NavBarUser></NavBarUser>
-        <Container>
-            <Paper>
-                <Image>
-                    Imagem
-                </Image>
-                <Info>
-                   
-                </Info>
-            </Paper>
-           
-        </Container>
-    </>
-  )
+    return (
+        <>
+            <NavBarUser></NavBarUser>
+            <Container>
+                <Paper>
+                    <Image>
+                        Imagem
+                    </Image>
+                    <Info>
+
+                    </Info>
+                </Paper>
+
+            </Container>
+        </>
+    )
 }
 
 export default BookDetail

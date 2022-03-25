@@ -9,7 +9,7 @@ import Container from '@material-ui/core/Container';
 import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import TableContainer from '@material-ui/core/TableContainer';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { PaginatedList } from '../helpers/PaginatedList';
 import { TablePagination } from '@material-ui/core';
 import { Parameter } from '../helpers/Parameter';
@@ -50,6 +50,7 @@ function BooksIndex() {
   const [allSearch, setAllSearch] = useState<string>("");
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const history = useHistory();
 
 
 
@@ -84,7 +85,7 @@ function BooksIndex() {
     }
   }
   const updateBook = (id: number) => {
-    window.location.href = "/updateBook/" + id;
+    history.push("/updateBook/" + id)
   }
 
   const handleChange = (event: unknown, page: number) => {
@@ -207,7 +208,7 @@ function BooksIndex() {
               </Box>
               <Box>
                 <Link to="/createBook" style={{ textDecoration: "none" }}>
-                  <Button variant='contained' color="primary" style={{ backgroundColor: "#fb8500" }}>
+                  <Button variant='contained' color="primary" style={{ backgroundColor: "#fb8500" }} onClick={() => history.push('/create')}>
                     Create Book
                   </Button>
                 </Link>

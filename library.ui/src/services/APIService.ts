@@ -25,6 +25,7 @@ class APIServiceClass {
         return this.url
     }
     SetToken(token: string | null){
+        
         this.token = token;
     }
     GetToken(): string{

@@ -14,8 +14,9 @@ service.GetUser().then(result => {
 
     if (result.sucess === true && result.obj != null && result.obj.token != null) {
         user = result.obj
+        console.log(user);
     }
-    console.log(user);
+
 
     ReactDOM.render(
         <React.StrictMode>
