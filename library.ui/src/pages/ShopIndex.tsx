@@ -8,6 +8,7 @@ import { PaginatedList } from '../helpers/PaginatedList';
 import { ListBookDTO } from '../models/books/ListBookDTO';
 import { Parameter } from '../helpers/Parameter';
 import Toast from '../helpers/Toast';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 
 function ShopIndex() {
 
@@ -37,6 +38,11 @@ function ShopIndex() {
             })
         setIsLoading(false);
     };
+
+    const ClickButton = (id: number) => {
+        window.location.href = "/BookDetail/"+id;
+
+    }
     return (
         <>
             <NavBarUser></NavBarUser>
@@ -45,9 +51,9 @@ function ShopIndex() {
                     {
                         data.items.map((element) => {
                             return (
-                                <Item key={element.id}>
+                                <Item key={element.id} onClick={()=>{ClickButton(element.id)}}>
                                     <Image>
-
+                                        <MenuBookIcon style={{color: '#ced4da', height: '100%' , width: '100%'}}/>
                                     </Image>
                                     <Info>
                                         <Nome><h3 style={{ margin: "0px" }}>{element.name}</h3></Nome>
@@ -55,7 +61,7 @@ function ShopIndex() {
                                         <Preco>{element.price}€</Preco>
                                     </Info>
                                     <ButtonSection>
-                                        <Button><ShoppingCartIcon />Comprar</Button>
+                                        <Button onClick={()=>ClickButton(element.id)}><ShoppingCartIcon />Comprar</Button>
                                     </ButtonSection>
                                 </Item>
                             );
@@ -76,25 +82,24 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow-x: hidden;
   
     
 `
 const Paper = styled.div`
     margin-top: 20px;
     border: 1px solid gray;
-    height: 88vh;
+    height: 100%;
     width: 90%;
     border-radius: 10px; 
     padding: 20px;
     font-family: roboto;
-
-    
 `;
 
 const Item = styled.div`
     width: 100%;
     height: 120px;
-    border: 1px solid black;
+    border: 1px solid gray;
     border-radius: 10px;
     display: flex;
     cursor: pointer;
@@ -149,5 +154,6 @@ const Descricao = styled.div`
 const Preco = styled.div`
     font-weight: 700;
 `
+
 
 

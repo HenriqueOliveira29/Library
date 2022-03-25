@@ -192,7 +192,46 @@ namespace Supermarket.API
 
             app.UseRouting();
 
-            
+            CreateUserRoles(serviceProvider).Wait();
         }
+
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            var UserManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            foreach (var role in Roles.List)
+            {
+                await CreateRole(serviceProvider, role.Value);
+            }
+
+            //ADMIN
+            var userADMIN = "admin.default@samsys.pt";
+            ApplicationUser auADMIN = await UserManager.FindByEmailAsync(userADMIN);
+            if (auADMIN == null)
+            {
+                auADMIN = new ApplicationUser
+                {
+                    Email = "admin.default@samsys.pt",
+                    EmailConfirmed = true,
+                    UserName = "admin.default@samsys.pt",
+                    Name = "Admin",
+                    CreatedDate = DateTime.Now,
+
+                };
+                await UserManager.CreateAsync(auADMIN, "Password1!");
+            }
+            await UserManager.AddToRolesAsync(auADMIN, new List<string> { Roles.Admin.Value });
+        }
+
+        public async Task CreateRole(IServiceProvider serviceProvider, string roleName)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
+            if (await RoleManager.RoleExistsAsync(roleName) == false)
+            {
+                await RoleManager.CreateAsync(new ApplicationRole(roleName));
+            }
+        }
+
+
     }
 }

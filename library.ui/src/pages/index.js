@@ -9,6 +9,7 @@ import AuthorEdit from "./AuthorEdit";
 import Login from "./Login";
 import CreateAccount from "./CreateAccount";
 import ShopIndex from "./ShopIndex";
+import BookDetail from './BookDetail';
 
 function Index() {
     return (
@@ -23,6 +24,8 @@ function Index() {
                 <Route exact path="/updateAuthor/:id" element={<AuthorEdit />}></Route>
                 <Route exact path="/login" element={<Login />}></Route>
                 <Route exact path="/createAccount" element={<CreateAccount />}></Route>
+                <Route exact path="/BookDetail/:id" element={<BookDetail/>}></Route>
+                
             </Routes>
         </BrowserRouter>
     );

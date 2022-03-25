@@ -22,6 +22,7 @@ function Login() {
             password: password
         }
 
+        console.log(login)
         var response = await service.Login(login);
 
         if (response.sucess == true && response.obj != null) {
@@ -29,8 +30,9 @@ function Login() {
 
             Toast.Show("success", "Login efetuado com sucesso!");
             setLoading(false);
+            console.log(response.obj)
 
-            window.location.href = "/";
+            //window.location.href = "/";
         }
         else {
             console.log(response.message);

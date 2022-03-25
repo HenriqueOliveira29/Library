@@ -10,6 +10,7 @@ import SearchIcon from '@material-ui/icons/Search';
 
 function NavBarUser() {
     const service: AuthService = new AuthService();
+
     const logout = async () => {
         const service = new AuthService();
 
@@ -25,7 +26,7 @@ function NavBarUser() {
         <Container>
             <Navbar>
                 <Logo>
-                    <Link to="/login" style={{ textDecoration: "none" }}>
+                    <Link to="/shop" style={{ textDecoration: "none" }}>
                         <LogoName>MyLibrary</LogoName>
                     </Link>
                 </Logo>
@@ -37,9 +38,9 @@ function NavBarUser() {
                 </SearchItem>
 
                 <Routes>
-                    <Link to="/login" style={{ textDecoration: "none" }}>
+                    <Button onClick={logout}>
                         <Route>Logout</Route>
-                    </Link>
+                    </Button>
                 </Routes>
             </Navbar>
         </Container>
@@ -49,8 +50,8 @@ function NavBarUser() {
 export default NavBarUser
 
 const Container = styled.div`
-    width: 100vw;
-    height: 10vh;
+    width: 100%;
+    height: 10%;
     background-color: #fb8500;
     margin: 0;
     display: flex;
@@ -103,7 +104,7 @@ const SearchItem = styled.div`
 const Search = styled.input`
     padding: 10px;
     padding-left: 20px;
-    width: 77%;
+    width: 75%;
     height: 10px;
     border-radius: 10px;
     border: transparent;
@@ -129,3 +130,8 @@ const Icon = styled.button`
         background-color: #ffbc0a;
     }
 `
+
+const Button = styled.button`
+    background-color: transparent;
+    border: none;
+`;

@@ -31,6 +31,7 @@ export const AuthProvider = (props: AuthProviderProps) => {
     const [currentUser, setCurrentUser] = useState<AuthDTO | null>(props.user);
     const [userRoles, setUserRoles] = useState<string[]>([]);
     const [isUserLoggedIn, setIsUserLoggedIn] = useState<boolean>(props.user != null ? true : false);
+
     APIService.SetToken(currentUser?.token ?? null);
 
     const loginUser = (user: AuthDTO | null) => {
@@ -43,6 +44,9 @@ export const AuthProvider = (props: AuthProviderProps) => {
         }
 
         setCurrentUser(user);
+        console.log(user);
+        console.log(currentUser);
+
         setIsUserLoggedIn(true);
 
 
@@ -79,6 +83,8 @@ export const AuthProvider = (props: AuthProviderProps) => {
     }
 
     useEffect(() => {
+        console.log("alterou")
+        console.log(currentUser)
         APIService.SetToken(currentUser?.token ?? null);
     }, [currentUser])
 
