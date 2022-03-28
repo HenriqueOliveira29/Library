@@ -9,6 +9,7 @@ import { ListBookDTO } from '../models/books/ListBookDTO';
 import { Parameter } from '../helpers/Parameter';
 import Toast from '../helpers/Toast';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
+import { useHistory } from 'react-router-dom';
 
 function ShopIndex() {
 
@@ -19,6 +20,7 @@ function ShopIndex() {
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [PageSize, setPageSize] = useState<number>(10);
     const [isLoading, setIsLoading] = useState<boolean>(true);
+    const history = useHistory();
 
     useEffect(() => {
         fetchData();
@@ -40,7 +42,7 @@ function ShopIndex() {
     };
 
     const ClickButton = (id: number) => {
-        window.location.href = "/BookDetail/"+id;
+        history.push("/BookDetail/" + id);
 
     }
     return (
@@ -51,9 +53,9 @@ function ShopIndex() {
                     {
                         data.items.map((element) => {
                             return (
-                                <Item key={element.id} onClick={()=>{ClickButton(element.id)}}>
+                                <Item key={element.id} onClick={() => { ClickButton(element.id) }}>
                                     <Image>
-                                        <MenuBookIcon style={{color: '#ced4da', height: '100%' , width: '100%'}}/>
+                                        <MenuBookIcon style={{ color: '#ced4da', height: '100%', width: '100%' }} />
                                     </Image>
                                     <Info>
                                         <Nome><h3 style={{ margin: "0px" }}>{element.name}</h3></Nome>
@@ -61,7 +63,7 @@ function ShopIndex() {
                                         <Preco>{element.price}€</Preco>
                                     </Info>
                                     <ButtonSection>
-                                        <Button onClick={()=>ClickButton(element.id)}><ShoppingCartIcon />Comprar</Button>
+                                        <Button onClick={() => ClickButton(element.id)}><ShoppingCartIcon />Comprar</Button>
                                     </ButtonSection>
                                 </Item>
                             );

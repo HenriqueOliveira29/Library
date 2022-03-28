@@ -1,6 +1,6 @@
 import { LocalDiningOutlined } from "@material-ui/icons";
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import styled from "styled-components";
 import { AuthProvider } from "../Context/AuthContext";
@@ -21,22 +21,18 @@ const Appbar = () => {
 
         window.location.href = "/login";
     }
+
+    const history = useHistory();
     return (
         <Container>
             <Navbar>
-                <Logo>
-                    <Link to="/" style={{ textDecoration: "none" }}>
-                        <LogoName>MyLibrary</LogoName>
-                    </Link>
+                <Logo onClick={() => history.push("/")}>
+                    <LogoName>MyLibrary</LogoName>
                 </Logo>
 
                 <Routes>
-                    <Link to="/" style={{ textDecoration: "none" }}>
-                        <Route>Books</Route>
-                    </Link>
-                    <Link to="/author" style={{ textDecoration: "none" }}>
-                        <Route>Autor</Route>
-                    </Link>
+                    <Route onClick={() => history.push('/')} >Books</Route>
+                    <Route onClick={() => history.push('/Authors')} >Autor</Route>
                     <Button onClick={logout}>
                         <Route>Logout</Route>
                     </Button>
