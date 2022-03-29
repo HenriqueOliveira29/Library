@@ -42,7 +42,7 @@ function ShopIndex() {
     };
 
     const ClickButton = (id: number) => {
-        history.push("/BookDetail/" + id);
+        history.push("/book/" + id);
 
     }
     return (

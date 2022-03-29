@@ -11,9 +11,12 @@ import { servicesVersion } from 'typescript';
 import { EditBookDTO } from '../models/books/EditBookDTO';
 import Toast from '../helpers/Toast';
 
+interface BookEditParams {
+    id: string
+}
 function BookEdit() {
     const authorService = new AuthorService();
-    const id: number = useParams();
+    const { id } = useParams<BookEditParams>();
     const [book, setBook] = useState<BookDTO>(new BookDTO());
     const service = new BookService();
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -42,7 +45,7 @@ function BookEdit() {
         if (id == null) {
             return "Erro;"
         }
-        const response = await service.getById(id).then((result) => {
+        const response = await service.getById(parseInt(id)).then((result) => {
             if (result.obj != null) {
                 setBook(result.obj);
 

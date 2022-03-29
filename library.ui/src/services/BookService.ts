@@ -18,6 +18,7 @@ export class BookService{
             headers:{
                 Accept: "application/json",
                 "Content-Type": "application/json",
+                "Authorization": "Bearer " + APIService.GetToken()
             }
         });
         return response.data;
@@ -36,6 +37,7 @@ export class BookService{
                 headers:{
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": "Bearer " + APIService.GetToken()
                 }
             });
             return response.data
@@ -48,7 +50,13 @@ export class BookService{
 
     async Delete(id: number) : Promise<MessagingHelper<null>>{
         try{
-            var response = await APIService.Axios().delete(`${APIService.GetURL()}/Books/delete/`+id);
+            var response = await APIService.Axios().delete(`${APIService.GetURL()}/Books/delete/`+id,{
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + APIService.GetToken()
+            }
+        });
             return response.data;
         }catch (error){
             return new MessagingHelper<null>(false,"Erro ao eliminar o livro", null);
@@ -58,8 +66,16 @@ export class BookService{
 
     async getById(id: number) : Promise<MessagingHelper<BookDTO | null>>{
         try{
-            var response = await APIService.Axios().get(`${APIService.GetURL()}/Books/`+id );
+            var response = await APIService.Axios().get(`${APIService.GetURL()}/Books/`+id,
+            {
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + APIService.GetToken()
+                }
+            });
             return response.data;
+            
         }catch (error){
             return new MessagingHelper<BookDTO | null>(false, "erro ao encontrar o livro", null);
         }
@@ -73,6 +89,7 @@ export class BookService{
                 headers:{
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": "Bearer " + APIService.GetToken()
                 }
             });
             return response.data;

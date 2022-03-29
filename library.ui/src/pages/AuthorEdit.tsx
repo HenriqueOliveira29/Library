@@ -18,6 +18,7 @@ function AuthorEdit() {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
+
         fetchData();
 
     }, [loading]);

@@ -4,33 +4,31 @@ import NavBarUser from '../Components/NavBarUser';
 import styled from "styled-components";
 import { BookDTO } from '../models/books/BookDTO';
 import { BookService } from '../services/BookService';
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 
+interface BookDetailParms {
+    id: string
+}
 
 function BookDetail() {
-    const id: number = useParams();
+    const { id } = useParams<BookDetailParms>();
     const [book, setBook] = useState<BookDTO>(new BookDTO());
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const service = new BookService();
 
     useEffect(() => {
         getBook();
-        console.log(book);
-
     }, [isLoading]);
 
     const getBook = async () => {
         if (id == null) {
             return "Erro;"
         }
-        const response = await service.getById(id).then((result) => {
+        const response = await service.getById(parseInt(id)).then((result) => {
             if (result.obj != null) {
                 setBook(result.obj);
-
             }
-
-
         });
-        console.log(book);
         setIsLoading(false);
     }
 
@@ -43,6 +41,32 @@ function BookDetail() {
                         Imagem
                     </Image>
                     <Info>
+                        <Data>
+                            <Title>
+                                <Name>{book.name}</Name>
+                            </Title>
+                            <Description>
+                                <Desc>{book.description}</Desc>
+                            </Description>
+                            <Author>
+                                {book.authorName}€
+                            </Author>
+                            <Price>
+                                {book.price}€
+                            </Price>
+                        </Data>
+                        <Footer>
+                            <Buy>
+                                {(book.stockNumber < 1) ?
+                                    <Stock0>Nao temos stock neste momento</Stock0>
+                                    :
+                                    <BuyButton>
+                                        <ShoppingCartIcon />Comprar
+                                    </BuyButton>
+
+                                }
+                            </Buy>
+                        </Footer>
 
                     </Info>
                 </Paper>
@@ -70,9 +94,26 @@ const Paper = styled.div`
 `
 
 const Info = styled.div`
-   
     width: 60%;
+    padding: 20px;
     border: 1px solid black;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+`
+
+const Stock0 = styled.label`
+    color: red;
+    background-color: red;
+`
+
+const Data = styled.div`
+
+`
+
+const Footer = styled.div`
+    margin: 20px;
 `
 
 const Image = styled.div`
@@ -81,3 +122,48 @@ const Image = styled.div`
     border: 1px solid black;
 `
 
+const Title = styled.div`
+
+`
+
+const Name = styled.h1`
+color: gray;
+
+`
+
+const Description = styled.div`
+   
+`
+
+const Desc = styled.label`
+
+`
+
+const Price = styled.div`
+    font-weight: 700;
+    margin-top: 20px;
+`
+
+const Author = styled.div`
+
+`
+
+const Buy = styled.div`
+    
+    display: flex;
+    justify-content: end;
+`
+
+const BuyButton = styled.button`
+    color: white;
+    background-color: #fb8500;
+    border:1px solid gray;
+    border-radius: 10px;
+    padding: 10px;
+    display:flex;
+    align-items: center;
+    cursor: pointer;
+    
+    
+   
+`

@@ -143,6 +143,7 @@ namespace Library.DAL.Services
         {
             MessageHelper<BookDTO> result = new();
             var book = await _bookRepository.GetById(bookId);
+            
 
             if (book == null) {
                 result.Sucess = false;

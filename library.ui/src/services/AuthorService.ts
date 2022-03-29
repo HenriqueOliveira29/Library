@@ -20,6 +20,7 @@ export class AuthorService{
                 headers:{
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": "Bearer " + APIService.GetToken()
                 }
                 
             });
@@ -39,6 +40,7 @@ export class AuthorService{
                 headers:{
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": "Bearer " + APIService.GetToken()
                 }
             });
             return response.data
@@ -49,7 +51,13 @@ export class AuthorService{
 
     async Delete(id: number) : Promise<MessagingHelper<null>>{
         try{
-            var response = await APIService.Axios().delete(`${APIService.GetURL()}/Author/delete/`+id);
+            var response = await APIService.Axios().delete(`${APIService.GetURL()}/Author/delete/`+id,{
+                headers:{
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + APIService.GetToken()
+                }
+            });
             return response.data;
         }catch (error){
             return new MessagingHelper<null>(false,"Erro ao eliminar o author", null);
@@ -65,6 +73,7 @@ export class AuthorService{
                     headers:{
                         Accept: "application/json",
                         "Content-Type": "application/json",
+                        "Authorization": "Bearer " + APIService.GetToken()
                     }
             });
             return response.data;
@@ -75,7 +84,13 @@ export class AuthorService{
 
     async GetById(id: number) : Promise<MessagingHelper<AuthorDTO | null>>{
         try{
-            var response = await APIService.Axios().get(`${APIService.GetURL()}/Author/` + id);
+            var response = await APIService.Axios().get(`${APIService.GetURL()}/Author/` + id,{
+                headers:{
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + APIService.GetToken()
+                }
+            });
             return response.data;
         }catch(error){
             return new MessagingHelper<AuthorDTO | null>(false, "Erro ao pesquisar o autor", null);
@@ -90,6 +105,7 @@ export class AuthorService{
                 headers:{
                     Accept: "application/json",
                     "Content-Type": "application/json",
+                    "Authorization": "Bearer " + APIService.GetToken()
                 }
             });
             return response.data;

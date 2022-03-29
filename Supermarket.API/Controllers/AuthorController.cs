@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Supermarket.Data;
 using Supermarket.Data.Entities;
 using Supermarket.Data.Interfaces.Services;
@@ -19,6 +21,7 @@ namespace Supermarket.API.Controllers
 
         [HttpPost]
         [Route("getAll")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<PaginateList<ListAuthorDTO>> getAll(SearchDTO search) {
             var result = await _authorService.GetAll(search);
             return result;
@@ -26,13 +29,14 @@ namespace Supermarket.API.Controllers
 
         [HttpGet]
         [Route("getAuthors")]
-
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<MessageHelper<List<ListAuthorDTO>>> getAuthors() {
             return await _authorService.GetAuthors();
         }
 
         [HttpPost]
         [Route("create")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{nameof(Roles.Admin)}")]
         public async Task<MessageHelper> Create(CreateAuthorDTO createAuthor)
         {
             var result = await _authorService.Create(createAuthor);
@@ -42,12 +46,14 @@ namespace Supermarket.API.Controllers
 
         [HttpPost]
         [Route("update")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{nameof(Roles.Admin)}")]
         public async Task<MessageHelper<AuthorDTO>> Update(EditAuthorDTO editAuthor)
         {
             return await _authorService.Update(editAuthor);
         }
 
         [HttpGet("{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<MessageHelper<AuthorDTO>> GetById(int id)
         {
             return await _authorService.GetById(id);
@@ -55,6 +61,7 @@ namespace Supermarket.API.Controllers
 
         [HttpDelete]
         [Route("delete/{id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{nameof(Roles.Admin)}")]
         public async Task<MessageHelper> Delete(int id)
         {
             return await _authorService.Delete(id);
