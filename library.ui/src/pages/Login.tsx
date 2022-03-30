@@ -39,6 +39,8 @@ function Login() {
         }
     }
 
+
+
     return (
         <>
             <NavbarBase />
@@ -68,6 +70,11 @@ function Login() {
                         <Link to="/createAccount">
                             Se nao tiver conta crie uma
                         </Link>
+                        <ResetPassword onClick={()=>{
+
+                        }}>
+                            Esqueceu-se da password
+                        </ResetPassword>
 
                     </FooterContainer>
                 </Form>
@@ -78,6 +85,14 @@ function Login() {
 }
 
 export default Login
+
+
+const ResetPassword = styled.a`
+    cursor: pointer;
+    color: blue;
+    text-decoration: underline;
+
+`
 
 const Container = styled.div`
     width: 100%;

@@ -29,7 +29,7 @@ namespace Supermarket.API.Controllers
 
         [HttpGet]
         [Route("getAuthors")]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<MessageHelper<List<ListAuthorDTO>>> getAuthors() {
             return await _authorService.GetAuthors();
         }

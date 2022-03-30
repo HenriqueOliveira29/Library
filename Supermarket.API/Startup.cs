@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Supermarket.Data;
 using Supermarket.Data.Entities;
 using Supermarket.Data.Interfaces.Repository;
 using Supermarket.Data.Interfaces.Services;
+using Swashbuckle.AspNetCore.Filters;
 using System.Security.Claims;
 using System.Text;
 
@@ -64,7 +66,18 @@ namespace Supermarket.API
             services.AddSignalR();
 
             services.AddHttpContextAccessor();
-            services.AddSwaggerGen();
+
+            services.AddSwaggerGen(options => {
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Description = "Standard Authorization header using the Bearer scheme (\"bearer {token}\")",
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                options.OperationFilter<SecurityRequirementsOperationFilter>();
+            });
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
