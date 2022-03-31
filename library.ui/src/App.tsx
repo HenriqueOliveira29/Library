@@ -12,6 +12,8 @@ import Login from "./pages/Login";
 import CreateAccount from "./pages/CreateAccount";
 import ShopIndex from "./pages/ShopIndex";
 import BookDetail from './pages/BookDetail';
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 
 
 interface PrivateRouteProps {
@@ -53,6 +55,8 @@ function App() {
                 <Switch>
                     <Route exact path='/login' component={Login} />
                     <Route exact path='/createAccount' component={CreateAccount} />
+                    <Route exact path='/forgotPassword' component={ForgotPassword} />
+                    <Route exact path='/ResetPassword' component={ResetPassword} />
                     <PrivateRoute loggedIn={isUserLoggedIn} exact path="/" requiredRoles={["Admin"]} userRoles={userRoles} component={BooksIndex}></PrivateRoute>
                     <PrivateRoute loggedIn={isUserLoggedIn} exact path="/updateBook/:id" requiredRoles={["Admin"]} userRoles={userRoles} component={BookEdit}></PrivateRoute>
                     <PrivateRoute loggedIn={isUserLoggedIn} exact path="/createBook" requiredRoles={["Admin"]} userRoles={userRoles} component={BookCreate}></PrivateRoute>

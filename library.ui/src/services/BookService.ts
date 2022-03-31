@@ -18,6 +18,7 @@ export class BookService{
             headers:{
                 Accept: "application/json",
                 "Content-Type": "application/json",
+                
                 "Authorization": "Bearer " + APIService.GetToken()
             }
         });
@@ -37,7 +38,7 @@ export class BookService{
                 headers:{
                     Accept: "application/json",
                     "Content-Type": "application/json",
-                    "Authorization": "Bearer " + APIService.GetToken()
+                    "Authorization": "Bearer " + APIService.GetToken(),
                 }
             });
             return response.data

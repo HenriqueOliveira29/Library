@@ -124,6 +124,7 @@ namespace Library.DAL.Services
             {
                 result.Sucess=false;
                 result.Message = "Não foi possivel enviar o email";
+                return result;
             }
 
             return result;

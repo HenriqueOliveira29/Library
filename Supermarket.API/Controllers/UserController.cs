@@ -6,6 +6,8 @@ using Supermarket.Data.Models.Helper;
 
 namespace Supermarket.API.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class UserController : ControllerBase
     {
         private IUserService _userService;

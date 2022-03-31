@@ -171,10 +171,13 @@ namespace Supermarket.API
             services.AddTransient<IBookRepository, BookRepository>();
             services.AddTransient<IAuthorRepository, AuthorRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            
 
             services.AddTransient<IBookService, BooksServices>();
             services.AddTransient<IAuthorService, AuthorService>();
             services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IEmailService, EmailService>();
 
         }
 

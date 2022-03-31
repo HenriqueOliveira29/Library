@@ -70,11 +70,9 @@ function Login() {
                         <Link to="/createAccount">
                             Se nao tiver conta crie uma
                         </Link>
-                        <ResetPassword onClick={()=>{
-
-                        }}>
+                        <Link to="/forgotPassword">
                             Esqueceu-se da password
-                        </ResetPassword>
+                        </Link>
 
                     </FooterContainer>
                 </Form>

@@ -44,7 +44,7 @@ namespace Library.DAL.Services
                 List<string> emailBCClist = new();
 
                 var handlebars = Handlebars.Create(new HandlebarsConfiguration() { FileSystem = new DiskFileSystem() });
-                var path = $"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)}\\Templates\\{templateName}.hbs";
+                var path = $"{Path.GetDirectoryName(Assembly.GetEntryAssembly().Location.Substring(0, Assembly.GetEntryAssembly().Location.IndexOf("bin\\")))}\\Templates\\{templateName}.hbs";
 
                 handlebars.RegisterHelper("breaklines", (writer, context, parameters) =>
                 {
