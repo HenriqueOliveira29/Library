@@ -63,6 +63,8 @@ namespace Supermarket.API.Controllers
                         Name = authDTO.Username!,
                     };
                     var resultCreateUserInDatabase = await _userManager.CreateAsync(userInDatabase, authDTO.Password);
+
+                    await _userManager.AddToRoleAsync(userInDatabase, Roles.Client.Value);
                     if (resultCreateUserInDatabase.Succeeded)
                     {
                         result.Sucess = true;

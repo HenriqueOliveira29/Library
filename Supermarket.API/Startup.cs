@@ -211,8 +211,6 @@ namespace Supermarket.API
                 endpoints.MapControllers();
             });
 
-            app.UseRouting();
-
             CreateUserRoles(serviceProvider).Wait();
         }
 

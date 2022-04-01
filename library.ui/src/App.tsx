@@ -37,7 +37,7 @@ const PrivateRoute = (props: PrivateRouteProps) => {
     }
 
     var userHasSomeRole: boolean = props.requiredRoles.some(r => props.userRoles!.includes(r));
-    return <Route path={props.path} exact={props.exact} render={(renderProps) => userHasSomeRole ? <props.component /> : <Redirect to='/login' />} />
+    return <Route path={props.path} exact={props.exact} render={(renderProps) => userHasSomeRole ? <props.component /> : <Redirect to='/shop' />} />
 }
 function App() {
     const { isUserLoggedIn, userRoles } = useAuth();
@@ -63,8 +63,8 @@ function App() {
                     <PrivateRoute loggedIn={isUserLoggedIn} exact path="/Authors" requiredRoles={["Admin"]} userRoles={userRoles} component={AuthorIndex}></PrivateRoute>
                     <PrivateRoute loggedIn={isUserLoggedIn} exact path="/AuthorsEdit/:id" requiredRoles={["Admin"]} userRoles={userRoles} component={AuthorEdit}></PrivateRoute>
                     <PrivateRoute loggedIn={isUserLoggedIn} exact path="/createAuthor" requiredRoles={["Admin"]} userRoles={userRoles} component={AuthorCreate}></PrivateRoute>
-                    <PrivateRoute loggedIn={isUserLoggedIn} exact path="/shop" requiredRoles={[]} userRoles={userRoles} component={ShopIndex}></PrivateRoute>
-                    <PrivateRoute loggedIn={isUserLoggedIn} exact path="/book/:id" requiredRoles={[]} userRoles={userRoles} component={BookDetail}></PrivateRoute>
+                    <PrivateRoute loggedIn={isUserLoggedIn} exact path="/shop" requiredRoles={["Client"]} userRoles={userRoles} component={ShopIndex}></PrivateRoute>
+                    <PrivateRoute loggedIn={isUserLoggedIn} exact path="/book/:id" requiredRoles={["Client"]} userRoles={userRoles} component={BookDetail}></PrivateRoute>
                 </Switch>
             </Router>
         </div>
