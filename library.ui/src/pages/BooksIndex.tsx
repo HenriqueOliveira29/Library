@@ -63,6 +63,7 @@ function BooksIndex() {
   const fetchData = async () => {
     var response = await service.GetAll(currentPage, PageSize, parameters, orderParameters)
       .then((result) => {
+        console.log(result);
         if (result.success == false) {
           Toast.Show("error", result.message)
         }

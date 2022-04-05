@@ -178,6 +178,7 @@ namespace Supermarket.API
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<IImagesService, ImagesService>();
 
         }
 

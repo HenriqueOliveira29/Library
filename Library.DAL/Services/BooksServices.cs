@@ -1,4 +1,5 @@
-﻿using Supermarket.Data.Entities;
+﻿using Microsoft.AspNetCore.Http;
+using Supermarket.Data.Entities;
 using Supermarket.Data.Interfaces.Repository;
 using Supermarket.Data.Interfaces.Services;
 using Supermarket.Data.Models;
@@ -11,10 +12,12 @@ namespace Library.DAL.Services
     {
         private readonly IBookRepository _bookRepository;
         private readonly IAuthorRepository _authorRepository;
-        public BooksServices(IBookRepository bookRepository, IAuthorRepository authorRepository)
+        private readonly IImagesService _imagesService;
+        public BooksServices(IBookRepository bookRepository, IAuthorRepository authorRepository, IImagesService imageService)
         {
             _bookRepository = bookRepository;
             _authorRepository = authorRepository;
+            _imagesService = imageService;
         }
 
         public async Task<MessageHelper> Create(CreateBookDTO createBook)
@@ -43,6 +46,8 @@ namespace Library.DAL.Services
                 }
 
                 var book = await _bookRepository.Create(createBook.ToEntity());
+
+                _imagesService.UploadImage(book.Id, createBook.foto);
 
                 if (book == null) {
 

@@ -32,10 +32,9 @@ namespace Supermarket.API.Controllers
 
         [HttpPost]
         [Route("create")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{nameof(Roles.Admin)}")]
-        public async Task<MessageHelper> Create(CreateBookDTO createBook) {
-
-             return  await _bookService.Create(createBook);
+        
+        public async Task<MessageHelper> Create([FromForm] CreateBookDTO createBook) {
+            return  await _bookService.Create(createBook);
             
         }
 

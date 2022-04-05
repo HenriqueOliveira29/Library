@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using Microsoft.AspNetCore.Http;
 using Supermarket.Data.Entities;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,8 @@ namespace Supermarket.Data.Models.Books
         public int StockNumber { get; set; }
 
         public int AuthorId { get; set; }
+
+        public IFormFile foto { get; set; }
 
         public Book ToEntity() {
             return new Book
